@@ -1,10 +1,10 @@
 cask "atelier" do
-  version "0.3.0"
-  sha256 "f28cc37c1e7816cfe2f285f15e30af22a54f4e1034e9d6ea199fc6e1abb537f1"
+  version "0.3.1"
+  sha256 "a1503a39a28ed2f4df316733f7dd3bb9e0badfd02500b9fe9d2f1c94e7abd59a"
 
   url "https://github.com/SAASEmpiree/atelier-fichiers/releases/download/v#{version}/Atelier_#{version}_aarch64.dmg"
   name "Atelier"
-  desc "Boîte à outils de fichiers 100 % locale (compression, conversion, PDF…)"
+  desc "Boîte à outils de fichiers locale (compression, conversion, PDF…)"
   homepage "https://github.com/SAASEmpiree/atelier-fichiers"
 
   depends_on arch: :arm64
