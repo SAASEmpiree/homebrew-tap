@@ -11,12 +11,11 @@ cask "atelier" do
 
   app "Atelier.app"
 
-  # L'app n'est pas encore signée : on retire la quarantaine après installation
-  # pour éviter le blocage Gatekeeper (sinon clic droit → Ouvrir serait requis).
-  postflight do
-    system_command "/usr/bin/xattr",
-                   args: ["-dr", "com.apple.quarantine", "#{appdir}/Atelier.app"]
-  end
+  caveats <<~EOS
+    Atelier n'est pas encore signée par Apple. Si macOS bloque le 1er lancement :
+      • clic droit sur Atelier dans Applications → « Ouvrir » (une seule fois),
+      • ou : xattr -dr com.apple.quarantine /Applications/Atelier.app
+  EOS
 
   zap trash: [
     "~/Library/Application Support/com.saasempiree.atelier",
