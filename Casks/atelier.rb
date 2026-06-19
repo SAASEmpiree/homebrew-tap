@@ -1,6 +1,6 @@
 cask "atelier" do
-  version "0.1.0"
-  sha256 "a195988598e98702107715f20973befeb95701dd7b5e4d8024bcb9b7948d3caa"
+  version "0.2.0"
+  sha256 "a30dc66a0c8440d9366d1cc2d1594b1557570becb3c8a6a6de868524d41a64ac"
 
   url "https://github.com/SAASEmpiree/atelier-fichiers/releases/download/v#{version}/Atelier_#{version}_aarch64.dmg"
   name "Atelier"
