@@ -11,6 +11,13 @@ cask "atelier" do
 
   app "Atelier.app"
 
+  # L'app n'est pas encore signée : on retire la quarantaine après installation
+  # pour éviter le blocage Gatekeeper (sinon clic droit → Ouvrir serait requis).
+  postflight do
+    system_command "/usr/bin/xattr",
+                   args: ["-dr", "com.apple.quarantine", "#{appdir}/Atelier.app"]
+  end
+
   zap trash: [
     "~/Library/Application Support/com.saasempiree.atelier",
     "~/Library/Caches/com.saasempiree.atelier",
