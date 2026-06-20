@@ -1,6 +1,6 @@
 cask "omnia" do
   version "1.0.0"
-  sha256 "19e58b6cf86894631effd87e066e0c2cd0eb3bfd76412e991265b4d9f77fd175"
+  sha256 "51cb2e63159e666c5f29af9cc241977a42a5bcf744b44665209ac439060a96a1"
 
   url "https://github.com/SAASEmpiree/omnia/releases/download/v#{version}/Omnia_#{version}_aarch64.dmg"
   name "Omnia"
