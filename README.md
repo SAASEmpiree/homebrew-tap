@@ -46,7 +46,7 @@ scoop install saasempiree/<app>
 | [Units](#units) | Convert length, area, mass, temperature, speed, volume and data from your menu bar, fully offline. | 0.1.1 |
 | [FrameLine](#frameline) | Screenshots, screen recordings, annotation and OCR from your menu bar, 100% local. | 1.0.0 |
 | [AppGrid](#appgrid) | Keeps Finder's Applications windows laid out as a 6-column, iPhone-style icon grid. | 1.0 |
-| [Comète](#comete) | Run Claude Code, Codex, Gemini and shells side by side in one cockpit, with VS Code-grade terminals. | pending |
+| [Comète](#comete) | Run Claude Code, Codex, Gemini and shells side by side in one cockpit, with VS Code-grade terminals. | 0.1.0 |
 | [Jarvis](#jarvis) | A voice-driven assistant for your Mac, powered by Claude, that talks back in French and acts on your apps. | 0.3 |
 | [Zap](#zap) | Open any project in your code editor in under two seconds, from a Spotlight-style menu-bar palette. | 2.5.8 |
 | [PleurIA](#pleuria) | A menu-bar planet that cries at every AI request and counts the litres of water your tokens cost. | 1.0 |
@@ -266,7 +266,7 @@ brew install --cask saasempiree/tap/appgrid
 ---
 
 <a name="comete"></a>
-### Comète
+### <img src="icons/comete.png" width="28" height="28" align="center" alt=""> Comète
 
 **Run Claude Code, Codex, Gemini and shells side by side in one cockpit, with VS Code-grade terminals.**
 
@@ -276,15 +276,13 @@ Comète runs your AI coding agents (Claude Code, Codex, Gemini or a plain shell)
 |---|---|
 | Platform | macOS 11+ · Apple Silicon |
 | Stack | Tauri · Rust |
-| Latest | first release pending |
+| Latest | [0.1.0](https://github.com/SAASEmpiree/homebrew-tap/releases/tag/comete-v0.1.0) |
 
 **Install**
 
 ```sh
 brew install --cask saasempiree/tap/comete
 ```
-
-_The cask is published with Comète's first release from this tap; until then the command above reports “no cask”._
 
 **Updates**: Through Homebrew: `brew upgrade --cask comete` (or `brew upgrade` for everything).
 
