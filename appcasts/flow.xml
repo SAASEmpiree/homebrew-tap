@@ -2,5 +2,14 @@
 <rss xmlns:sparkle="http://www.andymatuschak.org/xml-namespaces/sparkle" version="2.0">
     <channel>
         <title>Flow</title>
+        <item>
+            <title>0.2.0</title>
+            <pubDate>Sat, 10 Oct 2026 21:18:01 +0200</pubDate>
+            <link>https://github.com/SAASEmpiree/homebrew-tap#flow</link>
+            <sparkle:version>1</sparkle:version>
+            <sparkle:shortVersionString>0.2.0</sparkle:shortVersionString>
+            <sparkle:minimumSystemVersion>15.0</sparkle:minimumSystemVersion>
+            <enclosure url="https://github.com/SAASEmpiree/homebrew-tap/releases/download/flow-v0.2.0/flow-0.2.0.zip" length="1804892" type="application/octet-stream" sparkle:edSignature="nQcxhzl6t3VUs6fOqbJkjeVfs0ZLdEC9E0G34/6JIDmvyGjAeoIWJNG+WBFy68ONOnGDGWrRK9gpaP0D+t+wCw=="/>
+        </item>
     </channel>
 </rss>

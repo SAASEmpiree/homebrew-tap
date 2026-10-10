@@ -42,7 +42,7 @@ scoop install saasempiree/<app>
 | [Pécule](#pecule) | Simulate, track and budget your money on your Mac, with no bank link and no account. | pending |
 | [Memora](#memora) | Notes, spaced-repetition flashcards, quizzes and exam planning, organised by subject, all on your Mac. | pending |
 | [CodeLearn](#codelearn) | A technical dictionary you actually remember: 349 dev, cloud and AI terms with spaced repetition. | 1.0.0 |
-| [Flow](#flow) | Translate anything from your menu bar: on-device by default, DeepL or any LLM when you want it. | pending |
+| [Flow](#flow) | Translate anything from your menu bar: on-device by default, DeepL or any LLM when you want it. | 0.2.0 |
 | [Units](#units) | Convert length, area, mass, temperature, speed, volume and data from your menu bar, fully offline. | 0.1.1 |
 | [FrameLine](#frameline) | Screenshots, screen recordings, annotation and OCR from your menu bar, 100% local. | 1.0.0 |
 | [AppGrid](#appgrid) | Keeps Finder's Applications windows laid out as a 6-column, iPhone-style icon grid. | 1.0 |
@@ -177,7 +177,8 @@ brew install --cask saasempiree/tap/codelearn
 
 ---
 
-### Flow
+<a name="flow"></a>
+### <img src="icons/flow.png" width="28" height="28" align="center" alt=""> Flow
 
 **Translate anything from your menu bar: on-device by default, DeepL or any LLM when you want it.**
 
@@ -187,15 +188,13 @@ Flow is a small translator that lives in your menu bar. Type or paste text and t
 |---|---|
 | Platform | macOS 15+ (Sequoia) · Apple Silicon & Intel |
 | Stack | Swift · SwiftUI |
-| Latest | first release pending |
+| Latest | [0.2.0](https://github.com/SAASEmpiree/homebrew-tap/releases/tag/flow-v0.2.0) |
 
 **Install**
 
 ```sh
 brew install --cask saasempiree/tap/flow
 ```
-
-_The cask is published with Flow's first release from this tap; until then the command above reports “no cask”._
 
 **Updates**: Updates itself in the background with [Sparkle](https://sparkle-project.org): it checks once a day against the signed feed [`appcasts/flow.xml`](appcasts/flow.xml). Homebrew leaves it alone (`auto_updates true`).
 
