@@ -38,7 +38,7 @@ scoop install saasempiree/<app>
 | App | What it does | Latest |
 |---|---|---|
 | [Omnia](#omnia) | Convert, compress, merge and clean files 100% on your Mac, with zero network. | 1.0.0 |
-| [Classeur](#classeur) | Drop your paperwork in; it gets read, filed by year and month, and encrypted on your Mac. | pending |
+| [Classeur](#classeur) | Drop your paperwork in; it gets read, filed by year and month, and encrypted on your Mac. | 0.3.0 |
 | [Pécule](#pecule) | Simulate, track and budget your money on your Mac, with no bank link and no account. | pending |
 | [Memora](#memora) | Notes, spaced-repetition flashcards, quizzes and exam planning, organised by subject, all on your Mac. | pending |
 | [CodeLearn](#codelearn) | A technical dictionary you actually remember: 349 dev, cloud and AI terms with spaced repetition. | 1.0.0 |
@@ -82,7 +82,8 @@ scoop install saasempiree/omnia
 
 ---
 
-### Classeur
+<a name="classeur"></a>
+### <img src="icons/classeur.png" width="28" height="28" align="center" alt=""> Classeur
 
 **Drop your paperwork in; it gets read, filed by year and month, and encrypted on your Mac.**
 
@@ -92,15 +93,13 @@ Classeur files your administrative papers (bills, tax notices, IDs, contracts) f
 |---|---|
 | Platform | macOS 10.13+ · Apple Silicon |
 | Stack | Tauri · Rust |
-| Latest | first release pending |
+| Latest | [0.3.0](https://github.com/SAASEmpiree/homebrew-tap/releases/tag/classeur-v0.3.0) |
 
 **Install**
 
 ```sh
 brew install --cask saasempiree/tap/classeur
 ```
-
-_The cask is published with Classeur's first release from this tap; until then the command above reports “no cask”._
 
 **Updates**: Through Homebrew: `brew upgrade --cask classeur` (or `brew upgrade` for everything).
 
