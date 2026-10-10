@@ -299,6 +299,9 @@ function main() {
     }
   });
   if (res.busy) log(`another sync is running (pid ${res.busy}); the next trigger re-checks ${ready.map((t) => t.m.slug).join(', ')}`);
+  // What is still not synced after this run (still changing, lock busy, failed): audit shows it.
+  const started = Date.parse(state._lastRun.time);
+  state._lastRun.pending = todo.map((t) => t.m.slug).filter((slug) => !(state[slug]?.ok && Date.parse(state[slug].time) >= started));
   if (!opt.dryRun) writeJson(WATCH_STATE, state);
 }
 

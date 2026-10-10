@@ -191,7 +191,7 @@ function main() {
     const drift = rows.filter((r) => !r.ok).length;
     console.log(`\n${drift ? yellow(`${drift} app(s) drift from GitHub`) : green('Every app matches GitHub.')}`);
     const lr = watch._lastRun;
-    console.log(lr ? `Watcher (com.saasempiree.app-sync) last ran ${hhmm(lr.time)}${lr.pending?.length ? `, pending: ${lr.pending.join(', ')}` : ''}; log ~/Library/Logs/SAASEmpire/app-sync.log` : yellow('Watcher has never run (tools/install-watcher).'));
+    console.log(lr ? `Watcher (com.saasempiree.app-sync) last ran ${hhmm(lr.time)}${lr.pending?.length ? `, not synced yet: ${lr.pending.join(', ')}` : ', nothing left to sync'}; log ~/Library/Logs/SAASEmpire/app-sync.log` : yellow('Watcher has never run (tools/install-watcher).'));
     if (watch._access) console.log(red(`Watcher: ${watch._access.detail}`));
 
     console.log(bold(`\nPublic repos outside the allow-list (${PUBLIC_ALLOWLIST.join(', ')})`));
