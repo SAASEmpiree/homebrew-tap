@@ -3,6 +3,16 @@
     <channel>
         <title>Units</title>
         <item>
+            <title>0.1.2</title>
+            <pubDate>Sat, 10 Oct 2026 21:39:04 +0200</pubDate>
+            <link>https://github.com/SAASEmpiree/homebrew-tap#units</link>
+            <sparkle:version>3</sparkle:version>
+            <sparkle:shortVersionString>0.1.2</sparkle:shortVersionString>
+            <sparkle:minimumSystemVersion>13.0</sparkle:minimumSystemVersion>
+            <sparkle:hardwareRequirements>arm64</sparkle:hardwareRequirements>
+            <enclosure url="https://github.com/SAASEmpiree/homebrew-tap/releases/download/units-v0.1.2/units-0.1.2.zip" length="1421165" type="application/octet-stream" sparkle:edSignature="KbevYZTcovuYHgszAnrlmP4c3Ru+vWQtHesw+aBReN6uIaNjZCzwhcb4rLRG++ZsaQDC1MV+HcH4ZQxdOO9oCg=="/>
+        </item>
+        <item>
             <title>0.1.1</title>
             <pubDate>Sat, 10 Oct 2026 21:04:51 +0200</pubDate>
             <link>https://github.com/SAASEmpiree/homebrew-tap#units</link>

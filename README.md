@@ -40,7 +40,7 @@ scoop install saasempiree/<app>
 | [Omnia](#omnia) | Convert, compress, merge and clean files 100% on your Mac, with zero network. | 1.0.0 |
 | [Classeur](#classeur) | Drop your paperwork in; it gets read, filed by year and month, and encrypted on your Mac. | 0.3.0 |
 | [Flow](#flow) | Translate anything from your menu bar: on-device by default, DeepL or any LLM when you want it. | 0.2.0 |
-| [Units](#units) | Convert length, area, mass, temperature, speed, volume and data from your menu bar, fully offline. | 0.1.1 |
+| [Units](#units) | Convert length, area, mass, temperature, speed, volume and data from your menu bar, fully offline. | 0.1.2 |
 | [FrameLine](#frameline) | Screenshots, screen recordings, annotation and OCR from your menu bar, 100% local. | 1.0.0 |
 | [AppGrid](#appgrid) | Keeps Finder's Applications windows laid out as a 6-column, iPhone-style icon grid. | 1.0 |
 | [Comète](#comete) | Run Claude Code, Codex, Gemini and shells side by side in one cockpit, with VS Code-grade terminals. | 0.1.0 |
@@ -134,7 +134,7 @@ Units converts length, mass, temperature, speed, volume and data sizes one click
 |---|---|
 | Platform | macOS 13+ (Ventura) · Apple Silicon |
 | Stack | Swift · SwiftUI |
-| Latest | [0.1.1](https://github.com/SAASEmpiree/homebrew-tap/releases/tag/units-v0.1.1) |
+| Latest | [0.1.2](https://github.com/SAASEmpiree/homebrew-tap/releases/tag/units-v0.1.2) |
 
 **Install**
 

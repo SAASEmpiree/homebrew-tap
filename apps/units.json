@@ -16,8 +16,8 @@
     "arm64"
   ],
   "release": {
-    "version": "0.1.1",
-    "build": "2",
+    "version": "0.1.2",
+    "build": "3",
     "minOS": "13.0",
     "archs": [
       "arm64"
