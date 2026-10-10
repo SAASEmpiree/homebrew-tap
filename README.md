@@ -49,7 +49,7 @@ scoop install saasempiree/<app>
 | [Comète](#comete) | Run Claude Code, Codex, Gemini and shells side by side in one cockpit, with VS Code-grade terminals. | pending |
 | [Jarvis](#jarvis) | A voice-driven assistant for your Mac, powered by Claude, that talks back in French and acts on your apps. | pending |
 | [Zap](#zap) | Open any project in your code editor in under two seconds, from a Spotlight-style menu-bar palette. | 2.5.8 |
-| [PleurIA](#pleuria) | A menu-bar planet that cries at every AI request and counts the litres of water your tokens cost. | pending |
+| [PleurIA](#pleuria) | A menu-bar planet that cries at every AI request and counts the litres of water your tokens cost. | 1.0 |
 | [Kairo](#kairo) | A shared workspace for small teams: issues, docs and projects, Linear meets Notion. | own pipeline |
 
 ### Omnia
@@ -343,7 +343,8 @@ brew install --cask saasempiree/tap/zap
 
 ---
 
-### PleurIA
+<a name="pleuria"></a>
+### <img src="icons/pleuria.png" width="28" height="28" align="center" alt=""> PleurIA
 
 **A menu-bar planet that cries at every AI request and counts the litres of water your tokens cost.**
 
@@ -353,15 +354,13 @@ PleurIA puts a small Earth in your menu bar that sheds a tear every time an AI a
 |---|---|
 | Platform | macOS 13+ (Ventura) · Apple Silicon |
 | Stack | Swift · SwiftUI |
-| Latest | first release pending |
+| Latest | [1.0](https://github.com/SAASEmpiree/homebrew-tap/releases/tag/pleuria-v1.0) |
 
 **Install**
 
 ```sh
 brew install --cask saasempiree/tap/pleuria
 ```
-
-_The cask is published with PleurIA's first release from this tap; until then the command above reports “no cask”._
 
 **Updates**: Through Homebrew: `brew upgrade --cask pleuria` (or `brew upgrade` for everything).
 
