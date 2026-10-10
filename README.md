@@ -7,7 +7,7 @@
 
 [![Homebrew tap](https://img.shields.io/badge/brew-saasempiree%2Ftap-FBB040?style=flat-square&logo=homebrew&logoColor=white)](#quick-start)
 [![Scoop bucket](https://img.shields.io/badge/scoop-saasempiree-5391FE?style=flat-square&logo=windows&logoColor=white)](#windows)
-[![Apps](https://img.shields.io/badge/apps-9-0a0a0c?style=flat-square)](#catalogue)
+[![Apps](https://img.shields.io/badge/apps-10-0a0a0c?style=flat-square)](#catalogue)
 
 </div>
 
@@ -46,6 +46,7 @@ scoop install saasempiree/<app>
 | [Comète](#comete) | Run Claude Code, Codex, Gemini and shells side by side in one cockpit, with VS Code-grade terminals. | 0.1.0 |
 | [PleurIA](#pleuria) | A menu-bar planet that cries at every AI request and counts the litres of water your tokens cost. | 1.0 |
 | [Kairo](#kairo) | A shared workspace for small teams: issues, docs and projects, Linear meets Notion. | own pipeline |
+| [My CodexBar](#my-codexbar) | Claude Code and Codex usage limits, resets and spend in your menu bar. | 1.0.0 |
 
 <a name="omnia"></a>
 ### <img src="icons/omnia.png" width="28" height="28" align="center" alt=""> Omnia
@@ -253,6 +254,27 @@ Kairo is a desktop workspace for a small team: issues and projects in the spirit
 Kairo is not distributed through Homebrew. See its site: https://saasempiree.github.io/kairo-site/
 
 **Updates**: Kairo updates itself through its own release pipeline.
+
+---
+
+<a name="my-codexbar"></a>
+### <img src="icons/my-codexbar.png" width="28" height="28" align="center" alt=""> My CodexBar
+
+**Claude Code and Codex usage limits, resets and spend in your menu bar.**
+
+| | |
+|---|---|
+| Platform | macOS 14+ (Sonoma) · Apple Silicon |
+| Stack | Swift · SwiftUI |
+| Latest | [1.0.0](https://github.com/SAASEmpiree/homebrew-tap/releases/tag/my-codexbar-v1.0.0) |
+
+**Install**
+
+```sh
+brew install --cask saasempiree/tap/my-codexbar
+```
+
+**Updates**: Updates itself in the background with [Sparkle](https://sparkle-project.org): it checks once a day against the signed feed [`appcasts/my-codexbar.xml`](appcasts/my-codexbar.xml). Homebrew leaves it alone (`auto_updates true`).
 
 ---
 

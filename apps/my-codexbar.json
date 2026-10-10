@@ -1,0 +1,21 @@
+{
+  "name": "My CodexBar",
+  "slug": "my-codexbar",
+  "tagline": "Claude Code and Codex usage limits, resets and spend in your menu bar.",
+  "platforms": [
+    "macos"
+  ],
+  "stack": "swift",
+  "update": "sparkle",
+  "bundleId": "com.saasempiree.mycodexbar",
+  "appName": "My CodexBar.app",
+  "release": {
+    "version": "1.0.0",
+    "build": "1",
+    "minOS": "14.0",
+    "archs": [
+      "arm64"
+    ],
+    "date": "2026-10-10"
+  }
+}
