@@ -10,7 +10,7 @@
 import { existsSync, readdirSync, statSync } from 'node:fs';
 import { basename, join } from 'node:path';
 import { caskVersion } from './catalogue.mjs';
-import { INSTALL_DIRS, OWNER, PUBLIC_ALLOWLIST, REGISTRY, SCAN_ROOTS, TAP_FULL } from './config.mjs';
+import { INSTALL_DIRS, OWNER, PUBLIC_ALLOWLIST, REGISTRY, RETIRED, SCAN_ROOTS, TAP_FULL } from './config.mjs';
 import { Stop, appInfo, bold, cmpVersion, die, ghJson, green, readJson, red, run, tryRead, yellow } from './common.mjs';
 
 const opt = { fix: false, remoteOnly: false, strict: false, json: false };
@@ -122,6 +122,7 @@ function main() {
   for (const [slug, m] of Object.entries(scanLocal())) apps[slug] = { ...apps[slug], ...m };
   for (const [slug, r] of Object.entries(readJson(REGISTRY, {}))) apps[slug] = { ...r, ...apps[slug], repo: apps[slug]?.repo || r.repo, installedPath: r.installedPath };
 
+  for (const slug of RETIRED) delete apps[slug];
   const casks = new Set(ghList('Casks'));
   const feeds = new Set(ghList('appcasts'));
   const rows = [];

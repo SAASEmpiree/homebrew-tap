@@ -34,6 +34,9 @@ export const LEGACY_FEED_REPO = `${OWNER}/${OWNER}`;
 export const isComete = (m) => /^com[eè]te/i.test(m.name || '') || /^comete/.test(m.slug || '');
 // Apps with their own release pipeline (pushing their main = production).
 export const OWN_PIPELINE = ['kairo'];
+// Apps removed from the suite (2026-10-10): ship refuses them and audit never lists them, even if a
+// local folder with an app.json is still on disk.
+export const RETIRED = ['codelearn', 'jarvis', 'memora', 'pecule'];
 
 export const APP_DIR = '/Applications/My App';
 export const SUPPORT = join(HOME, 'Library/Application Support/SAASEmpire');

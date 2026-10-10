@@ -7,7 +7,7 @@
 
 [![Homebrew tap](https://img.shields.io/badge/brew-saasempiree%2Ftap-FBB040?style=flat-square&logo=homebrew&logoColor=white)](#quick-start)
 [![Scoop bucket](https://img.shields.io/badge/scoop-saasempiree-5391FE?style=flat-square&logo=windows&logoColor=white)](#windows)
-[![Apps](https://img.shields.io/badge/apps-14-0a0a0c?style=flat-square)](#catalogue)
+[![Apps](https://img.shields.io/badge/apps-10-0a0a0c?style=flat-square)](#catalogue)
 
 </div>
 
@@ -39,15 +39,11 @@ scoop install saasempiree/<app>
 |---|---|---|
 | [Omnia](#omnia) | Convert, compress, merge and clean files 100% on your Mac, with zero network. | 1.0.0 |
 | [Classeur](#classeur) | Drop your paperwork in; it gets read, filed by year and month, and encrypted on your Mac. | 0.3.0 |
-| [Pécule](#pecule) | Simulate, track and budget your money on your Mac, with no bank link and no account. | 0.1.0 |
-| [Memora](#memora) | Notes, spaced-repetition flashcards, quizzes and exam planning, organised by subject, all on your Mac. | 0.6.0 |
-| [CodeLearn](#codelearn) | A technical dictionary you actually remember: 349 dev, cloud and AI terms with spaced repetition. | 1.0.0 |
 | [Flow](#flow) | Translate anything from your menu bar: on-device by default, DeepL or any LLM when you want it. | 0.2.0 |
 | [Units](#units) | Convert length, area, mass, temperature, speed, volume and data from your menu bar, fully offline. | 0.1.1 |
 | [FrameLine](#frameline) | Screenshots, screen recordings, annotation and OCR from your menu bar, 100% local. | 1.0.0 |
 | [AppGrid](#appgrid) | Keeps Finder's Applications windows laid out as a 6-column, iPhone-style icon grid. | 1.0 |
 | [Comète](#comete) | Run Claude Code, Codex, Gemini and shells side by side in one cockpit, with VS Code-grade terminals. | 0.1.0 |
-| [Jarvis](#jarvis) | A voice-driven assistant for your Mac, powered by Claude, that talks back in French and acts on your apps. | 0.3 |
 | [Zap](#zap) | Open any project in your code editor in under two seconds, from a Spotlight-style menu-bar palette. | 2.5.8 |
 | [PleurIA](#pleuria) | A menu-bar planet that cries at every AI request and counts the litres of water your tokens cost. | 1.0 |
 | [Kairo](#kairo) | A shared workspace for small teams: issues, docs and projects, Linear meets Notion. | own pipeline |
@@ -102,75 +98,6 @@ brew install --cask saasempiree/tap/classeur
 ```
 
 **Updates**: Through Homebrew: `brew upgrade --cask classeur` (or `brew upgrade` for everything).
-
----
-
-<a name="pecule"></a>
-### <img src="icons/pecule.png" width="28" height="28" align="center" alt=""> Pécule
-
-**Simulate, track and budget your money on your Mac, with no bank link and no account.**
-
-Pécule helps you see your money clearly. Simulators project what savings, regular investing or a mortgage would give over time, all drawn on one interactive curve, with portfolio tracking and recurring subscriptions next. Local, private, no account. An educational tool, not investment advice.
-
-| | |
-|---|---|
-| Platform | macOS 10.13+ · Apple Silicon |
-| Stack | Tauri · Rust |
-| Latest | [0.1.0](https://github.com/SAASEmpiree/homebrew-tap/releases/tag/pecule-v0.1.0) |
-
-**Install**
-
-```sh
-brew install --cask saasempiree/tap/pecule
-```
-
-**Updates**: Through Homebrew: `brew upgrade --cask pecule` (or `brew upgrade` for everything).
-
----
-
-<a name="memora"></a>
-### <img src="icons/memora.png" width="28" height="28" align="center" alt=""> Memora
-
-**Notes, spaced-repetition flashcards, quizzes and exam planning, organised by subject, all on your Mac.**
-
-Memora brings all your revision together, organised by subject: course notes, flashcards scheduled by spaced repetition (FSRS), quizzes and mock exams, an exam planner and a focus timer. A passage of your notes becomes a card or a question in one click. Offline, no account, no ads, no tracking.
-
-| | |
-|---|---|
-| Platform | macOS 10.13+ · Apple Silicon |
-| Stack | Tauri · Rust |
-| Latest | [0.6.0](https://github.com/SAASEmpiree/homebrew-tap/releases/tag/memora-v0.6.0) |
-
-**Install**
-
-```sh
-brew install --cask saasempiree/tap/memora
-```
-
-**Updates**: Through Homebrew: `brew upgrade --cask memora` (or `brew upgrade` for everything).
-
----
-
-<a name="codelearn"></a>
-### <img src="icons/codelearn.png" width="28" height="28" align="center" alt=""> CodeLearn
-
-**A technical dictionary you actually remember: 349 dev, cloud and AI terms with spaced repetition.**
-
-CodeLearn is a dictionary of technical vocabulary (dev, systems, networking, cloud, security, AI) that you memorise. Every term has a plain definition, an analogy, a code sample, the classic pitfalls and a quiz, and a spaced-repetition engine brings back the terms you are about to forget. No account, no network. The interface is in French.
-
-| | |
-|---|---|
-| Platform | macOS 14+ (Sonoma) · Apple Silicon |
-| Stack | Swift · SwiftUI |
-| Latest | [1.0.0](https://github.com/SAASEmpiree/homebrew-tap/releases/tag/codelearn-v1.0.0) |
-
-**Install**
-
-```sh
-brew install --cask saasempiree/tap/codelearn
-```
-
-**Updates**: Through Homebrew: `brew upgrade --cask codelearn` (or `brew upgrade` for everything).
 
 ---
 
@@ -285,29 +212,6 @@ brew install --cask saasempiree/tap/comete
 ```
 
 **Updates**: Through Homebrew: `brew upgrade --cask comete` (or `brew upgrade` for everything).
-
----
-
-<a name="jarvis"></a>
-### <img src="icons/jarvis.png" width="28" height="28" align="center" alt=""> Jarvis
-
-**A voice-driven assistant for your Mac, powered by Claude, that talks back in French and acts on your apps.**
-
-Jarvis is a voice assistant that lives in your menu bar as a glowing orb. Speak to it and it answers out loud in French, powered by Claude, and acts on your Mac: files, apps, windows, the web. It remembers what you told it and what it already did.
-
-| | |
-|---|---|
-| Platform | macOS 14+ (Sonoma) · Apple Silicon |
-| Stack | Swift · SwiftUI |
-| Latest | [0.3](https://github.com/SAASEmpiree/homebrew-tap/releases/tag/jarvis-v0.3) |
-
-**Install**
-
-```sh
-brew install --cask saasempiree/tap/jarvis
-```
-
-**Updates**: Through Homebrew: `brew upgrade --cask jarvis` (or `brew upgrade` for everything).
 
 ---
 
