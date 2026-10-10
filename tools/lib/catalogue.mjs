@@ -105,7 +105,9 @@ function section(a, root) {
   const rel = a.release || null;
   const icon = existsSync(join(root, 'icons', `${a.slug}.png`)) ? `<img src="icons/${a.slug}.png" width="28" height="28" align="center" alt=""> ` : '';
   const out = [];
-  if (headingSlug(a.name) !== a.slug) out.push(`<a name="${a.slug}"></a>`);
+  // Explicit anchor: the profile and every app README link to #<slug>; a heading with an icon or an
+  // accent would otherwise get a different id ("-units", "pécule").
+  if (icon || headingSlug(a.name) !== a.slug) out.push(`<a name="${a.slug}"></a>`);
   out.push(`### ${icon}${a.name}`, '');
   if (a.tagline) out.push(`**${a.tagline}**`, '');
   if (a.description) out.push(a.description.trim(), '');

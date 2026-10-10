@@ -202,6 +202,7 @@ _The cask is published with Flow's first release from this tap; until then the c
 
 ---
 
+<a name="units"></a>
 ### <img src="icons/units.png" width="28" height="28" align="center" alt=""> Units
 
 **Convert length, area, mass, temperature, speed, volume and data from your menu bar, fully offline.**
