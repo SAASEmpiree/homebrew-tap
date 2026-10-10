@@ -40,6 +40,12 @@ export const SUPPORT = join(HOME, 'Library/Application Support/SAASEmpire');
 export const INSTALL_DIRS = [APP_DIR, SUPPORT]; // AppGrid lives in SUPPORT
 export const STATE_DIR = join(SUPPORT, 'ship');
 export const REGISTRY = join(STATE_DIR, 'registry.json');
+// One lock for every tool that commits/pushes: ship, sync-after-install and the watcher.
+export const SYNC_LOCK = join(STATE_DIR, 'sync.lock');
+// The watcher's last result per app (shown by audit), and its log.
+export const WATCH_STATE = join(STATE_DIR, 'watch.json');
+export const LOG_DIR = join(HOME, 'Library/Logs/SAASEmpire');
+export const WATCH_LOG = join(LOG_DIR, 'app-sync.log');
 export const CACHE = join(HOME, 'Library/Caches/SAASEmpire/ship');
 export const SAAS_ROOT = join(HOME, 'Documents/SAASEmpiree');
 export const SPARKLE_BIN = join(SAAS_ROOT, 'vendor/Sparkle/bin');

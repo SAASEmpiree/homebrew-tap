@@ -14,11 +14,11 @@ import { basename, dirname, join, relative, resolve } from 'node:path';
 import { writeReadme, renderCask } from './catalogue.mjs';
 import {
   APP_DIR, CACHE, INSTALL_DIRS, LEGACY_FEED_MIRROR, LEGACY_FEED_REPO, MAX_FILE_BYTES, OWN_PIPELINE, OWNER,
-  REGISTRY, SPARKLE_BIN, STATE_DIR, TAP_FULL, TAP_ROOT, assetName, catalogueUrl, downloadPrefix, feedUrl,
+  REGISTRY, SPARKLE_BIN, STATE_DIR, SYNC_LOCK, TAP_FULL, TAP_ROOT, assetName, catalogueUrl, downloadPrefix, feedUrl,
   isComete, releaseTag,
 } from './config.mjs';
 import {
-  Stop, appInfo, bold, bundleHash, die, gh, ghJson, info, ok, read, readJson, run, sha256File, state, step,
+  Stop, appInfo, bold, bundleHash, die, fingerprint, gh, ghJson, info, ok, read, readJson, run, sha256File, state, step,
   tryRead, warn, withLock, writeJson,
 } from './common.mjs';
 
@@ -26,21 +26,25 @@ const USAGE = `usage:
   ship <path-to-app-repo> [--dry-run] [--allow-comete] [--app <path/to/App.app>]
   sync-after-install <path-inside-app-repo> [--dry-run] [--allow-comete] [--app <path/to/App.app>]
   sync-after-install --from-installed <path-to-app-repo> [--dry-run] [--allow-comete]
+  sync-after-install --source-only <path-to-app-repo> [--dry-run] [--allow-comete]
 
   --from-installed publish the installed copy as it is (no build, no install, no fallback to the
                    build artifact; stops if the app is not installed). Same as ship --from-installed.
+  --source-only    the installed copy changed without a version bump: commit the source and push main,
+                   no tag, no release, no cask (the tag of that version already exists). Used by the watcher.
   --dry-run        print every step and command, change nothing (no build, no push, no upload)
   --allow-comete   allow Comète; even then the install step is skipped (never quit/relaunch Comète)
   --app <path>     publish this .app instead of the one ship would pick (installed copy, else artifact)`;
 
 function parseArgs(argv) {
-  const o = { dryRun: false, allowComete: false, syncOnly: false, fromInstalled: false, app: null, path: null };
+  const o = { dryRun: false, allowComete: false, syncOnly: false, fromInstalled: false, sourceOnly: false, app: null, path: null };
   for (let i = 0; i < argv.length; i++) {
     const a = argv[i];
     if (a === '--dry-run' || a === '-n') o.dryRun = true;
     else if (a === '--allow-comete') o.allowComete = true;
     else if (a === '--sync-only') o.syncOnly = true;
     else if (a === '--from-installed') o.fromInstalled = o.syncOnly = true;
+    else if (a === '--source-only') o.sourceOnly = o.fromInstalled = o.syncOnly = true;
     else if (a === '--app') o.app = argv[++i];
     else if (a === '-h' || a === '--help') {
       console.log(USAGE);
@@ -177,7 +181,7 @@ const revParse = (top, ref) => {
   return r.status === 0 ? r.stdout : null;
 };
 
-function syncRepo(root, m, version) {
+function syncRepo(root, m, version, { tag: withTag = true, message } = {}) {
   const top = tryRead('git', ['rev-parse', '--show-toplevel'], { cwd: root }).stdout;
   if (!top) die(`${root} is not a git repository. Create its repo first: gh new ${m.slug}`);
   if (resolve(top) !== resolve(root)) die(`app.json must sit at the repo root (${top}), not in ${root}`);
@@ -194,9 +198,9 @@ function syncRepo(root, m, version) {
   // Commit everything (secrets scanned first).
   if (state.dryRun) {
     const st = read('git', ['status', '--porcelain'], { cwd: top }).stdout;
-    info(st ? `would commit ${st.split('\n').length} changed path(s) as "release: v${version}"` : 'working tree clean, nothing to commit');
+    info(st ? `would commit ${st.split('\n').length} changed path(s) as "${message || `release: v${version}`}"` : 'working tree clean, nothing to commit');
     run('git', ['add', '-A'], { cwd: top });
-    run('git', ['commit', '-m', `release: v${version}`], { cwd: top });
+    run('git', ['commit', '-m', message || `release: v${version}`], { cwd: top });
   } else {
     run('git', ['add', '-A'], { cwd: top });
     const hits = secretScan(top);
@@ -205,8 +209,8 @@ function syncRepo(root, m, version) {
       die(`possible secrets or oversized files staged in ${top}:\n  - ${hits.join('\n  - ')}\nAdd them to .gitignore (or list a false positive in .secretscan-allow). Nothing committed or pushed.`);
     }
     if (tryRead('git', ['diff', '--cached', '--quiet'], { cwd: top }).status !== 0) {
-      run('git', ['commit', '--quiet', '-m', `release: v${version}`], { cwd: top });
-      ok(`committed "release: v${version}" on ${branch}`);
+      run('git', ['commit', '--quiet', '-m', message || `release: v${version}`], { cwd: top });
+      ok(`committed "${(message || `release: v${version}`).split('\n')[0]}" on ${branch}`);
     } else info('working tree clean, nothing to commit');
   }
 
@@ -225,6 +229,10 @@ function syncRepo(root, m, version) {
   if (branch !== 'main' && tryRead('git', ['rev-parse', '--abbrev-ref', `${branch}@{upstream}`], { cwd: top }).status === 0)
     run('git', ['push', '--quiet', 'origin', `refs/heads/${branch}:refs/heads/${branch}`], { cwd: top, allowFail: true });
 
+  if (!withTag) {
+    ok(`main pushed (no tag: v${version} already exists)`);
+    return { top, head };
+  }
   const tag = `v${version}`;
   const localTag = revParse(top, `refs/tags/${tag}^{commit}`);
   const remoteLines = tryRead('git', ['ls-remote', 'origin', `refs/tags/${tag}`, `refs/tags/${tag}^{}`], { cwd: top }).stdout.split('\n').filter(Boolean);
@@ -416,11 +424,14 @@ function pushTap(files, message) {
   die('could not push the tap after 3 attempts');
 }
 
-function remember(root, m, app) {
+function remember(root, m, app, mode) {
   if (state.dryRun) return;
   mkdirSync(STATE_DIR, { recursive: true });
   const reg = readJson(REGISTRY, {});
-  reg[m.slug] = { name: m.name, repo: root, bundleId: m.bundleId, artifact: m.artifact, update: m.update, installedPath: app.path.startsWith(root) ? null : app.path, lastVersion: app.version, lastBuild: app.build, lastShip: new Date().toISOString() };
+  // fingerprint = what is installed now (the watcher compares against it): a deploy.sh that already
+  // ran this hook leaves the watcher nothing to do.
+  const installed = app.path.startsWith(root) ? findInstalled(m) : app.path;
+  reg[m.slug] = { name: m.name, repo: root, bundleId: m.bundleId, artifact: m.artifact, update: m.update, installedPath: app.path.startsWith(root) ? null : app.path, lastVersion: app.version, lastBuild: app.build, lastShip: new Date().toISOString(), fingerprint: installed ? fingerprint(installed) : fingerprint(app.path), lastMode: mode };
   writeJson(REGISTRY, reg);
 }
 
@@ -428,7 +439,7 @@ function remember(root, m, app) {
 function main() {
   const opt = parseArgs(process.argv.slice(2));
   state.dryRun = opt.dryRun;
-  const tool = opt.fromInstalled ? 'sync-after-install --from-installed' : opt.syncOnly ? 'sync-after-install' : 'ship';
+  const tool = opt.sourceOnly ? 'sync-after-install --source-only' : opt.fromInstalled ? 'sync-after-install --from-installed' : opt.syncOnly ? 'sync-after-install' : 'ship';
   if (opt.syncOnly && !opt.fromInstalled && process.env.SAASEMPIRE_SHIP === '1') {
     console.log('sync-after-install: called from inside `ship`, which syncs right after the install. Skipping.');
     return;
@@ -443,6 +454,14 @@ function main() {
   if (read('gh', ['auth', 'status']).status !== 0) die('gh is not logged in');
   if (!existsSync(join(TAP_ROOT, '.git'))) die(`tap clone not found at ${TAP_ROOT}`);
 
+  // One lock for the whole run (build included): ship, sync-after-install and the watcher never overlap.
+  // A dry run changes nothing, so it does not wait for anyone.
+  if (state.dryRun) return publish(root, m, opt, comete);
+  if (existsSync(SYNC_LOCK) && !process.env.SAASEMPIRE_LOCK_OWNER) info(`waiting for the sync lock (${SYNC_LOCK})…`);
+  return withLock(SYNC_LOCK, () => publish(root, m, opt, comete));
+}
+
+function publish(root, m, opt, comete) {
   let installRan = false;
   if (!opt.syncOnly) {
     step('a', `build: ${m.build || '(none)'}`);
@@ -478,10 +497,21 @@ function main() {
     if (b.version !== app.version || b.build !== app.build) warn(`build artifact is ${b.version} (${b.build}) but the installed copy is ${app.version} (${app.build}); publishing the installed one`);
   }
 
+  if (opt.sourceOnly) {
+    step('d', `app repo: commit and push main (installed ${app.version} build ${app.build} changed without a version bump)`);
+    syncRepo(root, m, app.version, {
+      tag: false,
+      message: `sync: installed ${m.name} ${app.version} (build ${app.build}) changed without a version bump\n\nThe tag v${app.version} and its release keep the earlier build; bump the version to publish this one.`,
+    });
+    remember(root, m, app, 'source-only');
+    console.log(`\n${bold(`✓ ${m.name}: source pushed to main (v${app.version} unchanged).`)}`);
+    return;
+  }
+
   step('d', `app repo: commit, main, tag v${app.version}`);
   syncRepo(root, m, app.version);
 
-  withLock(join(STATE_DIR, 'tap.lock'), () => {
+  {
     step('e', `tap release ${releaseTag(m.slug, app.version)}, cask${m.update === 'sparkle' ? ', appcast' : ''}`);
     run('git', ['pull', '--quiet', '--rebase', '--autostash', 'origin', 'main'], { cwd: TAP_ROOT });
     const workDir = join(CACHE, m.slug, app.version);
@@ -497,8 +527,8 @@ function main() {
 
     step('f', 'commit and push the tap');
     pushTap(files, `${m.slug} ${app.version}`);
-  });
-  remember(root, m, app);
+  }
+  remember(root, m, app, 'release');
   console.log(`\n${bold(`✓ ${m.name} ${app.version} is on GitHub.`)}  ${catalogueUrl(m.slug)}`);
 }
 

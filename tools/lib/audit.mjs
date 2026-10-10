@@ -10,7 +10,7 @@
 import { existsSync, readdirSync, statSync } from 'node:fs';
 import { basename, join } from 'node:path';
 import { caskVersion } from './catalogue.mjs';
-import { INSTALL_DIRS, OWNER, PUBLIC_ALLOWLIST, REGISTRY, SCAN_ROOTS, TAP_FULL } from './config.mjs';
+import { INSTALL_DIRS, OWNER, PUBLIC_ALLOWLIST, REGISTRY, SCAN_ROOTS, TAP_FULL, WATCH_STATE } from './config.mjs';
 import { Stop, appInfo, bold, cmpVersion, die, ghJson, green, readJson, red, run, tryRead, yellow } from './common.mjs';
 
 const opt = { fix: false, remoteOnly: false, strict: false, json: false };
@@ -122,6 +122,17 @@ function main() {
   for (const [slug, m] of Object.entries(scanLocal())) apps[slug] = { ...apps[slug], ...m };
   for (const [slug, r] of Object.entries(readJson(REGISTRY, {}))) apps[slug] = { ...r, ...apps[slug], repo: apps[slug]?.repo || r.repo, installedPath: r.installedPath };
 
+  const watch = readJson(WATCH_STATE, {});
+  const hhmm = (iso) => {
+    const d = new Date(iso);
+    const p = (n) => String(n).padStart(2, '0');
+    return `${p(d.getMonth() + 1)}-${p(d.getDate())} ${p(d.getHours())}:${p(d.getMinutes())}`;
+  };
+  const watcherCell = (slug) => {
+    const w = watch[slug];
+    if (!w) return '—';
+    return `${w.ok ? 'ok' : 'FAILED'} ${w.action} ${w.version || ''} ${hhmm(w.time)}`.replace(/\s+/g, ' ');
+  };
   const casks = new Set(ghList('Casks'));
   const feeds = new Set(ghList('appcasts'));
   const rows = [];
@@ -146,7 +157,8 @@ function main() {
     else if (visibility !== 'PRIVATE') issues.push(`repo is ${visibility}`);
     if (typeof loc.dirty === 'number' && loc.dirty) issues.push(`${loc.dirty} uncommitted`);
     if (typeof loc.unpushed === 'number' && loc.unpushed) issues.push(`${loc.unpushed} unpushed`);
-    rows.push({ app: a.name || a.slug, slug: a.slug, update: a.update || '?', installed: installed || '—', tag: tag || '—', cask: cask || '—', appcast: appcast || '—', visibility, dirty: loc.dirty, unpushed: loc.unpushed, ok: issues.length === 0, issues });
+    if (watch[a.slug]?.ok === false) issues.push(`watcher: ${String(watch[a.slug].detail || 'failed').split('\n')[0].slice(0, 80)}`);
+    rows.push({ app: a.name || a.slug, slug: a.slug, update: a.update || '?', installed: installed || '—', tag: tag || '—', cask: cask || '—', appcast: appcast || '—', visibility, dirty: loc.dirty, unpushed: loc.unpushed, watcher: watcherCell(a.slug), ok: issues.length === 0, issues });
   }
 
   // Visibility guard.
@@ -166,8 +178,8 @@ function main() {
     console.log(JSON.stringify({ date: new Date().toISOString(), apps: rows, publicOutsideAllowList: exposed.map((r) => r.name), madePrivate: fixed, failed, allowListedNotPublic: notPublic }, null, 2));
   } else {
     console.log(bold(`SAASEmpiree audit · ${new Date().toISOString().replace('T', ' ').slice(0, 19)}${opt.remoteOnly ? ' · remote-only' : ''}\n`));
-    const head = ['App', 'Update', 'Installed', 'Repo tag', 'Cask', 'Appcast', 'Repo', 'Dirty', 'Unpushed', 'Status'];
-    const body = rows.map((r) => [r.app, r.update, r.installed, r.tag, r.cask, r.appcast, r.visibility.toLowerCase(), String(r.dirty), String(r.unpushed), r.ok ? 'OK' : r.issues.join('; ')]);
+    const head = ['App', 'Update', 'Installed', 'Repo tag', 'Cask', 'Appcast', 'Repo', 'Dirty', 'Unpushed', 'Watcher (last)', 'Status'];
+    const body = rows.map((r) => [r.app, r.update, r.installed, r.tag, r.cask, r.appcast, r.visibility.toLowerCase(), String(r.dirty), String(r.unpushed), r.watcher, r.ok ? 'OK' : r.issues.join('; ')]);
     const w = head.map((h, i) => Math.max(h.length, ...body.map((b) => b[i].length)));
     const line = (cells) => `| ${cells.map((c, i) => c.padEnd(w[i])).join(' | ')} |`;
     console.log(line(head));
@@ -178,6 +190,9 @@ function main() {
     }
     const drift = rows.filter((r) => !r.ok).length;
     console.log(`\n${drift ? yellow(`${drift} app(s) drift from GitHub`) : green('Every app matches GitHub.')}`);
+    const lr = watch._lastRun;
+    console.log(lr ? `Watcher (com.saasempiree.app-sync) last ran ${hhmm(lr.time)}${lr.pending?.length ? `, pending: ${lr.pending.join(', ')}` : ''}; log ~/Library/Logs/SAASEmpire/app-sync.log` : yellow('Watcher has never run (tools/install-watcher).'));
+    if (watch._access) console.log(red(`Watcher: ${watch._access.detail}`));
 
     console.log(bold(`\nPublic repos outside the allow-list (${PUBLIC_ALLOWLIST.join(', ')})`));
     if (!exposed.length) console.log(green('  none'));

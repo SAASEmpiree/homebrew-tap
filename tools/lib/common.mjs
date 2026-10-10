@@ -1,7 +1,7 @@
 // Small helpers shared by ship / sync-after-install / audit. No npm dependencies.
 import { spawnSync } from 'node:child_process';
 import { createHash } from 'node:crypto';
-import { existsSync, lstatSync, mkdirSync, readFileSync, readdirSync, readlinkSync, rmSync, writeFileSync } from 'node:fs';
+import { existsSync, lstatSync, mkdirSync, readFileSync, readdirSync, readlinkSync, rmSync, statSync, writeFileSync } from 'node:fs';
 import { join, relative } from 'node:path';
 
 const tty = process.stdout.isTTY;
@@ -122,39 +122,91 @@ const sleepArr = new Int32Array(new SharedArrayBuffer(4));
 export const sleep = (ms) => Atomics.wait(sleepArr, 0, 0, ms);
 
 // Process lock (mkdir is atomic). Stale locks (dead pid) are taken over.
-export function withLock(dir, fn) {
-  mkdirSync(join(dir, '..'), { recursive: true });
-  const deadline = Date.now() + 10 * 60 * 1000;
-  for (;;) {
+// One lock (config.mjs SYNC_LOCK) serialises ship, sync-after-install and the watcher. A child the
+// lock holder spawns (the watcher running ship) inherits it through SAASEMPIRE_LOCK_OWNER=<holder pid>
+// and runs without re-taking it.
+function lockHolder(dir) {
+  let pid = 0;
+  try {
+    pid = Number(readFileSync(join(dir, 'pid'), 'utf8'));
+  } catch {}
+  let alive = false;
+  if (pid) {
     try {
-      mkdirSync(dir);
-      writeFileSync(join(dir, 'pid'), String(process.pid));
-      break;
-    } catch {
-      let pid = 0;
-      try {
-        pid = Number(readFileSync(join(dir, 'pid'), 'utf8'));
-      } catch {}
-      let alive = false;
-      if (pid) {
-        try {
-          process.kill(pid, 0);
-          alive = true;
-        } catch {}
-      }
-      if (!alive) {
-        rmSync(dir, { recursive: true, force: true });
-        continue;
-      }
-      if (Date.now() > deadline) die(`lock ${dir} held by pid ${pid} for 10 min`);
-      sleep(2000);
+      process.kill(pid, 0);
+      alive = true;
+    } catch (e) {
+      alive = e.code === 'EPERM';
     }
+  }
+  return { pid, alive };
+}
+
+function acquire(dir) {
+  mkdirSync(join(dir, '..'), { recursive: true });
+  try {
+    mkdirSync(dir);
+    writeFileSync(join(dir, 'pid'), String(process.pid));
+    return true;
+  } catch {
+    const h = lockHolder(dir);
+    if (!h.alive) {
+      rmSync(dir, { recursive: true, force: true });
+      return acquire(dir);
+    }
+    return false;
+  }
+}
+
+const inherited = (dir) => {
+  const owner = process.env.SAASEMPIRE_LOCK_OWNER;
+  return owner && existsSync(dir) && String(lockHolder(dir).pid) === owner;
+};
+
+export function withLock(dir, fn, { waitMs = 10 * 60 * 1000 } = {}) {
+  if (inherited(dir)) return fn();
+  const deadline = Date.now() + waitMs;
+  while (!acquire(dir)) {
+    if (Date.now() > deadline) die(`lock ${dir} held by pid ${lockHolder(dir).pid} for ${Math.round(waitMs / 60000)} min`);
+    sleep(2000);
   }
   try {
     return fn();
   } finally {
     rmSync(dir, { recursive: true, force: true });
   }
+}
+
+// Non-blocking: returns {busy: pid} without running fn when someone else holds the lock.
+export function tryLock(dir, fn) {
+  if (inherited(dir)) return { value: fn() };
+  if (!acquire(dir)) return { busy: lockHolder(dir).pid };
+  try {
+    return { value: fn() };
+  } finally {
+    rmSync(dir, { recursive: true, force: true });
+  }
+}
+
+// Identity of an installed bundle: the CDHash of its code signature (it covers the main executable,
+// Info.plist and the sealed resources), falling back to the executable's size+mtime when unsigned.
+export function fingerprint(appPath) {
+  const r = tryRead('codesign', ['-dvvv', appPath]);
+  const m = /^CDHash=([0-9a-f]+)/m.exec(`${r.stdout}\n${r.stderr}`);
+  if (m) return `cdhash:${m[1]}`;
+  const exe = plist(appPath, 'CFBundleExecutable');
+  try {
+    const st = statSync(join(appPath, 'Contents/MacOS', exe || ''));
+    return `stat:${st.size}:${Math.round(st.mtimeMs)}`;
+  } catch {
+    return null;
+  }
+}
+
+// macOS notification + nothing else (callers log). Never throws.
+export function notify(title, message) {
+  const esc = (x) => String(x).replace(/\\/g, '\\\\').replace(/"/g, '\\"').slice(0, 400);
+  spawnSync('osascript', ['-e', `display notification "${esc(message)}" with title "${esc(title)}" sound name "Basso"`], { stdio: 'ignore' });
 }
 
 export function readJson(path, fallback = null) {

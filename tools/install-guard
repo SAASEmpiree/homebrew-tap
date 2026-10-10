@@ -7,6 +7,7 @@
 #   - writes ~/Library/LaunchAgents/com.saasempiree.github-guard.plist: every day at 10:00,
 #     `audit --fix-visibility --remote-only`, appended to ~/Library/Logs/SAASEmpire/github-guard.log
 #   - gh alias:  gh new <name>  =  gh repo create SAASEmpiree/<name> --private --clone
+#   - then runs install-watcher (the app-sync LaunchAgent and its "SAASEmpire Sync.app" launcher)
 #
 #   --uninstall   removes the launchd job (keeps the log and the alias)
 set -euo pipefail
@@ -18,7 +19,7 @@ LOG="$HOME/Library/Logs/SAASEmpire/github-guard.log"
 DOMAIN="gui/$(id -u)"
 
 launchctl bootout "$DOMAIN/$LABEL" 2>/dev/null || true
-if [ "${1:-}" = "--uninstall" ]; then rm -f "$PLIST"; echo "guard removed"; exit 0; fi
+if [ "${1:-}" = "--uninstall" ]; then rm -f "$PLIST"; echo "guard removed"; "$DIR/install-watcher" --uninstall; exit 0; fi
 
 NODE="$(_saas_node)"
 mkdir -p "$DEST/lib" "$(dirname "$LOG")" "$(dirname "$PLIST")"
@@ -58,3 +59,6 @@ echo "run it now:      launchctl kickstart $DOMAIN/$LABEL && tail -f \"$LOG\""
 
 gh alias set new 'repo create SAASEmpiree/$1 --private --clone' --clobber >/dev/null
 echo "gh alias:        gh new <name>  ->  $(gh alias list | grep '^new:' | sed 's/^new: *//')"
+
+# The app-sync watcher (GitHub = what is installed, whoever installed it): see install-watcher.
+"$DIR/install-watcher"

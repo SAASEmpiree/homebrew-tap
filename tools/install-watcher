@@ -1,0 +1,87 @@
+#!/bin/bash
+# install-watcher: installs the app-sync watcher. Safe to re-run (after editing tools/lib or sync-app).
+#
+#   - builds tools/sync-app/main.swift into "SAASEmpire Sync.app" (com.saasempiree.sync), signs it with
+#     the stable "SAASEmpire Local Signing" identity (its ~/Documents grant survives rebuilds) and puts it
+#     in ~/Library/Application Support/SAASEmpire/ (a helper: never in /Applications/My App)
+#   - writes ~/Library/LaunchAgents/com.saasempiree.app-sync.plist: runs tools/watch-installed through
+#     that app on every change of /Applications/My App or ~/Library/Application Support/SAASEmpire, and
+#     every 10 min (an in-place overwrite of a bundle does not always touch its parent folder)
+#   - log: ~/Library/Logs/SAASEmpire/app-sync.log
+#
+#   --uninstall   unloads the job and removes the plist (keeps the app, the log and the state)
+#   --probe       opens the app once so macOS asks for the ~/Documents grant
+set -euo pipefail
+DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"; . "$DIR/_node.sh"
+LABEL="com.saasempiree.app-sync"
+PLIST="$HOME/Library/LaunchAgents/$LABEL.plist"
+SUPPORT="$HOME/Library/Application Support/SAASEmpire"
+APP="$SUPPORT/SAASEmpire Sync.app"
+LOG="$HOME/Library/Logs/SAASEmpire/app-sync.log"
+SIGN_ID="SAASEmpire Local Signing"
+DOMAIN="gui/$(id -u)"
+
+if [ "${1:-}" = "--probe" ]; then open -n "$APP"; echo "opened $APP: allow its Documents prompt if macOS shows one"; exit 0; fi
+launchctl bootout "$DOMAIN/$LABEL" 2>/dev/null || true
+if [ "${1:-}" = "--uninstall" ]; then rm -f "$PLIST"; echo "watcher removed"; exit 0; fi
+
+NODE="$(_saas_node)"
+security find-identity -p codesigning | grep -q "$SIGN_ID" || { echo "ABORT: identity '$SIGN_ID' missing (see @START APP)" >&2; exit 4; }
+
+# 1) Build the launcher (staged, then swapped in only if it changed: the grant is keyed on the
+#    identifier + certificate, so a rebuild keeps it either way).
+STAGE="$(mktemp -d)/SAASEmpire Sync.app"
+mkdir -p "$STAGE/Contents/MacOS"
+swiftc -O -target "$(uname -m)-apple-macosx13.0" "$DIR/sync-app/main.swift" -o "$STAGE/Contents/MacOS/SAASEmpireSync"
+cp "$DIR/sync-app/Info.plist" "$STAGE/Contents/Info.plist"
+printf 'APPL????' > "$STAGE/Contents/PkgInfo"
+codesign --force --sign "$SIGN_ID" --identifier com.saasempiree.sync "$STAGE"
+codesign -d -r- "$STAGE" 2>&1 | grep -q 'certificate leaf' || { echo "ABORT: launcher is not signed with '$SIGN_ID'" >&2; exit 5; }
+if [ -d "$APP" ] && cmp -s "$STAGE/Contents/MacOS/SAASEmpireSync" "$APP/Contents/MacOS/SAASEmpireSync" && cmp -s "$STAGE/Contents/Info.plist" "$APP/Contents/Info.plist"; then
+  echo "launcher unchanged: $APP"
+else
+  rm -rf "$APP"; ditto "$STAGE" "$APP"; echo "launcher installed: $APP"
+fi
+rm -rf "$(dirname "$STAGE")"
+
+# 2) The LaunchAgent
+mkdir -p "$(dirname "$LOG")" "$(dirname "$PLIST")"
+cat > "$PLIST" <<PLIST
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+  <key>Label</key><string>$LABEL</string>
+  <key>ProgramArguments</key>
+  <array>
+    <string>$APP/Contents/MacOS/SAASEmpireSync</string>
+    <string>$NODE</string>
+    <string>$DIR/lib/watch.mjs</string>
+  </array>
+  <key>AssociatedBundleIdentifiers</key>
+  <array><string>com.saasempiree.sync</string></array>
+  <key>WatchPaths</key>
+  <array>
+    <string>/Applications/My App</string>
+    <string>$SUPPORT</string>
+  </array>
+  <key>StartInterval</key><integer>600</integer>
+  <key>ThrottleInterval</key><integer>30</integer>
+  <key>RunAtLoad</key><true/>
+  <key>ProcessType</key><string>Background</string>
+  <key>EnvironmentVariables</key>
+  <dict>
+    <key>PATH</key><string>/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin</string>
+    <key>HOME</key><string>$HOME</string>
+    <key>LANG</key><string>en_US.UTF-8</string>
+  </dict>
+  <key>StandardOutPath</key><string>$LOG</string>
+  <key>StandardErrorPath</key><string>$LOG</string>
+</dict>
+</plist>
+PLIST
+plutil -lint "$PLIST" >/dev/null
+launchctl bootstrap "$DOMAIN" "$PLIST"
+echo "watcher loaded: $PLIST"
+echo "log:            $LOG"
+echo "run it now:     launchctl kickstart $DOMAIN/$LABEL"

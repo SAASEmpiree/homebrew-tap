@@ -1,0 +1,7 @@
+#!/bin/bash
+# watch-installed [--dry-run] [--verbose] [--app <slug>]
+# Publishes every installed app whose bundle changed since its last sync (see tools/README.md).
+# launchd runs it through "SAASEmpire Sync.app" (install-watcher); you can also run it by hand.
+DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"; . "$DIR/_node.sh"
+NODE="$(_saas_node)" || exit 127
+exec "$NODE" "$DIR/lib/watch.mjs" "$@"
