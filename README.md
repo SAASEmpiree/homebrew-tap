@@ -44,9 +44,9 @@ scoop install saasempiree/<app>
 | [FrameLine](#frameline) | Screenshots, screen recordings, annotation and OCR from your menu bar, 100% local. | 1.0.0 |
 | [AppGrid](#appgrid) | Keeps Finder's Applications windows laid out as a 6-column, iPhone-style icon grid. | 1.0 |
 | [Comète](#comete) | Run Claude Code, Codex, Gemini and shells side by side in one cockpit, with VS Code-grade terminals. | 0.1.0 |
+| [My CodexBar](#my-codexbar) | Claude Code and Codex usage limits, resets and spend in your menu bar. | 1.0.0 |
 | [PleurIA](#pleuria) | A menu-bar planet that cries at every AI request and counts the litres of water your tokens cost. | 1.0 |
 | [Kairo](#kairo) | A shared workspace for small teams: issues, docs and projects, Linear meets Notion. | own pipeline |
-| [My CodexBar](#my-codexbar) | Claude Code and Codex usage limits, resets and spend in your menu bar. | 1.0.0 |
 
 <a name="omnia"></a>
 ### <img src="icons/omnia.png" width="28" height="28" align="center" alt=""> Omnia
@@ -215,6 +215,29 @@ brew install --cask saasempiree/tap/comete
 
 ---
 
+<a name="my-codexbar"></a>
+### <img src="icons/my-codexbar.png" width="28" height="28" align="center" alt=""> My CodexBar
+
+**Claude Code and Codex usage limits, resets and spend in your menu bar.**
+
+My CodexBar shows how much of your Claude Code (and, if you switch them on, Codex and other AI coding) plan is left, right in the menu bar: the 5-hour session and weekly limits, when they reset, and what your local sessions would cost at API prices. It reads everything on your Mac and warns you before a limit runs out. A private copy of CodexBar by Peter Steinberger (MIT), maintained independently.
+
+| | |
+|---|---|
+| Platform | macOS 14+ (Sonoma) · Apple Silicon |
+| Stack | Swift · SwiftUI |
+| Latest | [1.0.0](https://github.com/SAASEmpiree/homebrew-tap/releases/tag/my-codexbar-v1.0.0) |
+
+**Install**
+
+```sh
+brew install --cask saasempiree/tap/my-codexbar
+```
+
+**Updates**: Updates itself in the background with [Sparkle](https://sparkle-project.org): it checks once a day against the signed feed [`appcasts/my-codexbar.xml`](appcasts/my-codexbar.xml). Homebrew leaves it alone (`auto_updates true`).
+
+---
+
 <a name="pleuria"></a>
 ### <img src="icons/pleuria.png" width="28" height="28" align="center" alt=""> PleurIA
 
@@ -254,27 +277,6 @@ Kairo is a desktop workspace for a small team: issues and projects in the spirit
 Kairo is not distributed through Homebrew. See its site: https://saasempiree.github.io/kairo-site/
 
 **Updates**: Kairo updates itself through its own release pipeline.
-
----
-
-<a name="my-codexbar"></a>
-### <img src="icons/my-codexbar.png" width="28" height="28" align="center" alt=""> My CodexBar
-
-**Claude Code and Codex usage limits, resets and spend in your menu bar.**
-
-| | |
-|---|---|
-| Platform | macOS 14+ (Sonoma) · Apple Silicon |
-| Stack | Swift · SwiftUI |
-| Latest | [1.0.0](https://github.com/SAASEmpiree/homebrew-tap/releases/tag/my-codexbar-v1.0.0) |
-
-**Install**
-
-```sh
-brew install --cask saasempiree/tap/my-codexbar
-```
-
-**Updates**: Updates itself in the background with [Sparkle](https://sparkle-project.org): it checks once a day against the signed feed [`appcasts/my-codexbar.xml`](appcasts/my-codexbar.xml). Homebrew leaves it alone (`auto_updates true`).
 
 ---
 

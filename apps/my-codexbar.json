@@ -1,7 +1,9 @@
 {
+  "order": 11,
   "name": "My CodexBar",
   "slug": "my-codexbar",
   "tagline": "Claude Code and Codex usage limits, resets and spend in your menu bar.",
+  "description": "My CodexBar shows how much of your Claude Code (and, if you switch them on, Codex and other AI coding) plan is left, right in the menu bar: the 5-hour session and weekly limits, when they reset, and what your local sessions would cost at API prices. It reads everything on your Mac and warns you before a limit runs out. A private copy of CodexBar by Peter Steinberger (MIT), maintained independently.",
   "platforms": [
     "macos"
   ],
