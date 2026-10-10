@@ -52,7 +52,8 @@ scoop install saasempiree/<app>
 | [PleurIA](#pleuria) | A menu-bar planet that cries at every AI request and counts the litres of water your tokens cost. | 1.0 |
 | [Kairo](#kairo) | A shared workspace for small teams: issues, docs and projects, Linear meets Notion. | own pipeline |
 
-### Omnia
+<a name="omnia"></a>
+### <img src="icons/omnia.png" width="28" height="28" align="center" alt=""> Omnia
 
 **Convert, compress, merge and clean files 100% on your Mac, with zero network.**
 

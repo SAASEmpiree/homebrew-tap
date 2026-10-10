@@ -17,5 +17,14 @@
     "arm64"
   ],
   "scoop": "omnia",
-  "caveats": "Audio/video tools and document conversion use ffmpeg and LibreOffice when installed (optional)."
+  "caveats": "Audio/video tools and document conversion use ffmpeg and LibreOffice when installed (optional).",
+  "release": {
+    "version": "1.0.0",
+    "build": "1.0.0",
+    "minOS": "10.13",
+    "archs": [
+      "arm64"
+    ],
+    "date": "2026-10-10"
+  }
 }
