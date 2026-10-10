@@ -447,7 +447,9 @@ function main() {
   if (!opt.syncOnly) {
     step('a', `build: ${m.build || '(none)'}`);
     if (!m.build) die('app.json has no "build" command');
-    run('/bin/bash', ['-c', m.build], { cwd: root, inherit: true });
+    // SAASEMPIRE_SHIP=1 here too: a build script that also installs (AppGrid's build.sh) must not
+    // sync from inside the build; ship syncs once, after the install step.
+    run('/bin/bash', ['-c', m.build], { cwd: root, inherit: true, env: { SAASEMPIRE_SHIP: '1' } });
     step('b', `install: ${m.install || '(none declared)'}`);
     if (m.install && comete) warn('Comète: install skipped (never quit or relaunch Comète from a tool)');
     else if (m.install) {
