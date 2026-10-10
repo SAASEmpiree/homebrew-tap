@@ -14,5 +14,14 @@
   "minOS": "10.13",
   "archs": [
     "arm64"
-  ]
+  ],
+  "release": {
+    "version": "0.1.0",
+    "build": "0.1.0",
+    "minOS": "10.13",
+    "archs": [
+      "arm64"
+    ],
+    "date": "2026-10-10"
+  }
 }
