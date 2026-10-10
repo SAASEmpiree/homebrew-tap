@@ -1,0 +1,18 @@
+{
+  "order": 7,
+  "name": "Units",
+  "slug": "units",
+  "tagline": "Convert length, area, mass, temperature, speed, volume and data from your menu bar, fully offline.",
+  "description": "Units converts length, mass, temperature, speed, volume and data sizes one click away. Click the ⇄ icon in the menu bar, pick a category, type a number: done. Fully offline, no account, no tracking.",
+  "platforms": [
+    "macos"
+  ],
+  "stack": "swift",
+  "update": "sparkle",
+  "bundleId": "com.saasempiree.convertunit",
+  "appName": "Units.app",
+  "minOS": "13.0",
+  "archs": [
+    "arm64"
+  ]
+}

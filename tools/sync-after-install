@@ -1,0 +1,7 @@
+#!/bin/bash
+# sync-after-install <path-inside-app-repo> [--dry-run] [--allow-comete] [--app <App.app>]
+# The hook an app's deploy/install script calls on its last line: steps (c)-(f) of ship only,
+# because the build and the install just happened. See tools/README.md.
+DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"; . "$DIR/_node.sh"
+NODE="$(_saas_node)" || exit 127
+exec "$NODE" "$DIR/lib/ship.mjs" --sync-only "$@"

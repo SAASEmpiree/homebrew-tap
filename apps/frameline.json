@@ -1,0 +1,18 @@
+{
+  "order": 8,
+  "name": "FrameLine",
+  "slug": "frameline",
+  "tagline": "Screenshots, screen recordings, annotation and OCR from your menu bar, 100% local.",
+  "description": "FrameLine captures an area, a window or the whole screen, and records your screen with system audio and microphone. Annotate a shot, pin it on screen, copy its text (OCR), trim a recording, and find everything again in the history. 100% local, interface in 10 languages.",
+  "platforms": [
+    "macos"
+  ],
+  "stack": "swift",
+  "update": "brew",
+  "bundleId": "com.saasempiree.frameline",
+  "appName": "FrameLine.app",
+  "minOS": "14.0",
+  "archs": [
+    "arm64"
+  ]
+}

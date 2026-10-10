@@ -1,0 +1,6 @@
+#!/bin/bash
+# ship <path-to-app-repo> [--dry-run] [--allow-comete] [--app <App.app>]
+# Build, install, then publish to GitHub (repo main + tag, tap release, cask, appcast). See tools/README.md.
+DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"; . "$DIR/_node.sh"
+NODE="$(_saas_node)" || exit 127
+exec "$NODE" "$DIR/lib/ship.mjs" "$@"

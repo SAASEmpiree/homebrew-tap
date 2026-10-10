@@ -1,0 +1,18 @@
+{
+  "order": 10,
+  "name": "Comète",
+  "slug": "comete",
+  "tagline": "Run Claude Code, Codex, Gemini and shells side by side in one cockpit, with VS Code-grade terminals.",
+  "description": "Comète runs your AI coding agents (Claude Code, Codex, Gemini or a plain shell) side by side, each in a real terminal, and shows at a glance which one is working, waiting or done. Task titles, notifications, skills and dictation are built in. The interface is in French.",
+  "platforms": [
+    "macos"
+  ],
+  "stack": "tauri",
+  "update": "brew",
+  "bundleId": "com.saasempiree.comete",
+  "appName": "Comete.app",
+  "minOS": "11.0",
+  "archs": [
+    "arm64"
+  ]
+}

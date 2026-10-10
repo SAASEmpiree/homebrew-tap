@@ -1,0 +1,60 @@
+#!/bin/bash
+# install-guard: installs the daily GitHub guard and the `gh new` alias. Safe to re-run
+# (re-run it after changing tools/lib/*.mjs so the guard gets the new copy).
+#
+#   - copies the audit tool to ~/Library/Application Support/SAASEmpire/github-guard/
+#     (launchd jobs cannot read ~/Documents under TCC, so the job must not run from this clone)
+#   - writes ~/Library/LaunchAgents/com.saasempiree.github-guard.plist: every day at 10:00,
+#     `audit --fix-visibility --remote-only`, appended to ~/Library/Logs/SAASEmpire/github-guard.log
+#   - gh alias:  gh new <name>  =  gh repo create SAASEmpiree/<name> --private --clone
+#
+#   --uninstall   removes the launchd job (keeps the log and the alias)
+set -euo pipefail
+DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"; . "$DIR/_node.sh"
+LABEL="com.saasempiree.github-guard"
+PLIST="$HOME/Library/LaunchAgents/$LABEL.plist"
+DEST="$HOME/Library/Application Support/SAASEmpire/github-guard"
+LOG="$HOME/Library/Logs/SAASEmpire/github-guard.log"
+DOMAIN="gui/$(id -u)"
+
+launchctl bootout "$DOMAIN/$LABEL" 2>/dev/null || true
+if [ "${1:-}" = "--uninstall" ]; then rm -f "$PLIST"; echo "guard removed"; exit 0; fi
+
+NODE="$(_saas_node)"
+mkdir -p "$DEST/lib" "$(dirname "$LOG")" "$(dirname "$PLIST")"
+cp "$DIR"/lib/{config,common,catalogue,audit}.mjs "$DEST/lib/"
+
+cat > "$PLIST" <<PLIST
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+  <key>Label</key><string>$LABEL</string>
+  <key>ProgramArguments</key>
+  <array>
+    <string>$NODE</string>
+    <string>$DEST/lib/audit.mjs</string>
+    <string>--fix-visibility</string>
+    <string>--remote-only</string>
+  </array>
+  <key>EnvironmentVariables</key>
+  <dict>
+    <key>PATH</key><string>/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin</string>
+    <key>HOME</key><string>$HOME</string>
+  </dict>
+  <key>StartCalendarInterval</key>
+  <dict><key>Hour</key><integer>10</integer><key>Minute</key><integer>0</integer></dict>
+  <key>RunAtLoad</key><false/>
+  <key>StandardOutPath</key><string>$LOG</string>
+  <key>StandardErrorPath</key><string>$LOG</string>
+  <key>WorkingDirectory</key><string>$DEST</string>
+</dict>
+</plist>
+PLIST
+plutil -lint "$PLIST" >/dev/null
+launchctl bootstrap "$DOMAIN" "$PLIST"
+echo "guard installed: $PLIST (daily 10:00, log $LOG)"
+echo "run it now:      launchctl kickstart $DOMAIN/$LABEL && tail -f \"$LOG\""
+
+gh alias set new 'repo create SAASEmpiree/$1 --private --clone' --clobber >/dev/null
+echo "gh alias:        gh new <name>  ->  $(gh alias list | grep '^new:' | sed 's/^new: *//')"

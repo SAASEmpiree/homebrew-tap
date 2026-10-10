@@ -1,0 +1,12 @@
+# Release zips are built in ~/Library/Caches/SAASEmpire/ship, never here.
+*.zip
+*.dmg
+*.exe
+*.msi
+*.tar.gz
+# Never commit a signing key.
+*private_key*
+*.p12
+*.pem
+.env*
+.DS_Store

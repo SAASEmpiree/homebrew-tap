@@ -1,0 +1,18 @@
+{
+  "order": 13,
+  "name": "PleurIA",
+  "slug": "pleuria",
+  "tagline": "A menu-bar planet that cries at every AI request and counts the litres of water your tokens cost.",
+  "description": "PleurIA puts a small Earth in your menu bar that sheds a tear every time an AI agent receives a request, and keeps a running count of the litres of water your prompts cost the data centres. A playful, slightly guilt-inducing gauge. Everything is computed locally; nothing is sent anywhere.",
+  "platforms": [
+    "macos"
+  ],
+  "stack": "swift",
+  "update": "brew",
+  "bundleId": "com.saasempiree.pleuria",
+  "appName": "PleurIA.app",
+  "minOS": "13.0",
+  "archs": [
+    "arm64"
+  ]
+}

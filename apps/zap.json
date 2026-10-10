@@ -1,0 +1,18 @@
+{
+  "order": 12,
+  "name": "Zap",
+  "slug": "zap",
+  "tagline": "Open any project in your code editor in under two seconds, from a Spotlight-style menu-bar palette.",
+  "description": "Press ⌥ Space, type two or three letters, hit Return: Zap finds the project among the folders you told it to watch and opens it in a new window of your editor. Fuzzy search learns what you open most. 100% local, interface in 20 languages.",
+  "platforms": [
+    "macos"
+  ],
+  "stack": "swift",
+  "update": "brew",
+  "bundleId": "com.saasempiree.zap",
+  "appName": "Zap.app",
+  "minOS": "14.0",
+  "archs": [
+    "arm64"
+  ]
+}

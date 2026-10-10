@@ -1,0 +1,20 @@
+{
+  "order": 1,
+  "name": "Omnia",
+  "slug": "omnia",
+  "tagline": "Convert, compress, merge and clean files 100% on your Mac, with zero network.",
+  "description": "Omnia gathers the little file chores you would normally hand to a website: convert an image or a document, shrink a PDF, merge or split pages, trim audio and video, strip location and camera data from photos. Everything happens on your computer: no upload, no account, no network.",
+  "platforms": [
+    "macos",
+    "windows"
+  ],
+  "stack": "tauri",
+  "update": "brew",
+  "bundleId": "com.saasempiree.omnia",
+  "appName": "Omnia.app",
+  "minOS": "10.13",
+  "archs": [
+    "arm64"
+  ],
+  "scoop": "omnia"
+}

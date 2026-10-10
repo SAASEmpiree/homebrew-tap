@@ -1,0 +1,21 @@
+{
+  "order": 14,
+  "name": "Kairo",
+  "slug": "kairo",
+  "tagline": "A shared workspace for small teams: issues, docs and projects, Linear meets Notion.",
+  "description": "Kairo is a desktop workspace for a small team: issues and projects in the spirit of Linear, documents in the spirit of Notion, updated live for everyone. It ships through its own release pipeline, not through this tap.",
+  "platforms": [
+    "macos",
+    "windows"
+  ],
+  "stack": "electron",
+  "update": "own",
+  "bundleId": "app.kairo.desktop",
+  "appName": "Kairo.app",
+  "minOS": "12.0",
+  "archs": [
+    "arm64"
+  ],
+  "installNote": "Kairo is not distributed through Homebrew. See its site: https://saasempiree.github.io/kairo-site/",
+  "updateNote": "Kairo updates itself through its own release pipeline."
+}

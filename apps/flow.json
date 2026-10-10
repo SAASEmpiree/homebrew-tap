@@ -1,0 +1,19 @@
+{
+  "order": 6,
+  "name": "Flow",
+  "slug": "flow",
+  "tagline": "Translate anything from your menu bar: on-device by default, DeepL or any LLM when you want it.",
+  "description": "Flow is a small translator that lives in your menu bar. Type or paste text and the translation appears as you type, on your Mac with Apple's built-in engine. When you want more polish, switch to DeepL or any OpenAI-compatible model, local Ollama included. 115 languages, interface in 20.",
+  "platforms": [
+    "macos"
+  ],
+  "stack": "swift",
+  "update": "sparkle",
+  "bundleId": "com.saasempiree.flow",
+  "appName": "Flow.app",
+  "minOS": "15.0",
+  "archs": [
+    "x86_64",
+    "arm64"
+  ]
+}

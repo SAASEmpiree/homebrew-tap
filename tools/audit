@@ -1,0 +1,7 @@
+#!/bin/bash
+# audit [--fix-visibility] [--remote-only] [--json]
+# One row per app: installed version vs repo tag vs cask vs appcast, visibility, dirty/unpushed.
+# Plus every PUBLIC repo outside the allow-list (--fix-visibility makes them private).
+DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"; . "$DIR/_node.sh"
+NODE="$(_saas_node)" || exit 127
+exec "$NODE" "$DIR/lib/audit.mjs" "$@"

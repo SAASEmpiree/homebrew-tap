@@ -1,0 +1,18 @@
+{
+  "order": 9,
+  "name": "AppGrid",
+  "slug": "appgrid",
+  "tagline": "Keeps Finder's Applications windows laid out as a 6-column, iPhone-style icon grid.",
+  "description": "AppGrid is an invisible helper that keeps Finder's Applications windows laid out like an iPhone home screen: a 6-column grid where an icon dropped on a slot takes it and the others shift. It steps aside as soon as you sort the window another way. No interface, no settings, nothing stored.",
+  "platforms": [
+    "macos"
+  ],
+  "stack": "swift",
+  "update": "brew",
+  "bundleId": "com.saasempiree.appgrid",
+  "appName": "AppGrid.app",
+  "minOS": "26.0",
+  "archs": [
+    "arm64"
+  ]
+}

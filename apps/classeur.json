@@ -1,0 +1,18 @@
+{
+  "order": 2,
+  "name": "Classeur",
+  "slug": "classeur",
+  "tagline": "Drop your paperwork in; it gets read, filed by year and month, and encrypted on your Mac.",
+  "description": "Classeur files your administrative papers (bills, tax notices, IDs, contracts) for you. It reads them (OCR), makes them searchable, and reminds you before a document expires or a deadline comes up. Your documents stay on your computer, encrypted, and the app works offline.",
+  "platforms": [
+    "macos"
+  ],
+  "stack": "tauri",
+  "update": "brew",
+  "bundleId": "com.classeur.app",
+  "appName": "Classeur.app",
+  "minOS": "10.13",
+  "archs": [
+    "arm64"
+  ]
+}

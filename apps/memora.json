@@ -1,0 +1,18 @@
+{
+  "order": 4,
+  "name": "Memora",
+  "slug": "memora",
+  "tagline": "Notes, spaced-repetition flashcards, quizzes and exam planning, organised by subject, all on your Mac.",
+  "description": "Memora brings all your revision together, organised by subject: course notes, flashcards scheduled by spaced repetition (FSRS), quizzes and mock exams, an exam planner and a focus timer. A passage of your notes becomes a card or a question in one click. Offline, no account, no ads, no tracking.",
+  "platforms": [
+    "macos"
+  ],
+  "stack": "tauri",
+  "update": "brew",
+  "bundleId": "com.memora.app",
+  "appName": "Memora.app",
+  "minOS": "10.13",
+  "archs": [
+    "arm64"
+  ]
+}
