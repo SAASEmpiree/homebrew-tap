@@ -15,7 +15,7 @@ import { writeReadme, renderCask } from './catalogue.mjs';
 import {
   APP_DIR, CACHE, INSTALL_DIRS, LEGACY_FEED_MIRROR, LEGACY_FEED_REPO, MAX_FILE_BYTES, OWN_PIPELINE, OWNER,
   REGISTRY, SPARKLE_BIN, STATE_DIR, TAP_FULL, TAP_ROOT, assetName, catalogueUrl, downloadPrefix, feedUrl,
-  RETIRED, isComete, releaseTag,
+  isComete, releaseTag,
 } from './config.mjs';
 import {
   Stop, appInfo, bold, bundleHash, die, gh, ghJson, info, ok, read, readJson, run, sha256File, state, step,
@@ -437,7 +437,6 @@ function main() {
   const m = loadManifest(root);
   console.log(bold(`${tool}: ${m.name} (${m.slug})  ${state.dryRun ? '[DRY RUN, nothing is changed]' : ''}`));
 
-  if (RETIRED.includes(m.slug)) die(`${m.name} was removed from the suite (RETIRED in tools/lib/config.mjs): nothing is published.`);
   const comete = isComete(m);
   if (comete && !opt.allowComete) die(`${m.name} hosts the agent sessions: refusing. Re-run with --allow-comete (the install step is skipped even then).`);
   if (OWN_PIPELINE.includes(m.slug) || m.update === 'own') die(`${m.name} has its own release pipeline (pushing its main = production). ${tool} does not handle it.`);
