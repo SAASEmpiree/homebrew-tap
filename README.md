@@ -44,7 +44,7 @@ scoop install saasempiree/<app>
 | [CodeLearn](#codelearn) | A technical dictionary you actually remember: 349 dev, cloud and AI terms with spaced repetition. | pending |
 | [Flow](#flow) | Translate anything from your menu bar: on-device by default, DeepL or any LLM when you want it. | pending |
 | [Units](#units) | Convert length, area, mass, temperature, speed, volume and data from your menu bar, fully offline. | 0.1.1 |
-| [FrameLine](#frameline) | Screenshots, screen recordings, annotation and OCR from your menu bar, 100% local. | pending |
+| [FrameLine](#frameline) | Screenshots, screen recordings, annotation and OCR from your menu bar, 100% local. | 1.0.0 |
 | [AppGrid](#appgrid) | Keeps Finder's Applications windows laid out as a 6-column, iPhone-style icon grid. | pending |
 | [Comète](#comete) | Run Claude Code, Codex, Gemini and shells side by side in one cockpit, with VS Code-grade terminals. | pending |
 | [Jarvis](#jarvis) | A voice-driven assistant for your Mac, powered by Claude, that talks back in French and acts on your apps. | pending |
@@ -225,7 +225,8 @@ brew install --cask saasempiree/tap/units
 
 ---
 
-### FrameLine
+<a name="frameline"></a>
+### <img src="icons/frameline.png" width="28" height="28" align="center" alt=""> FrameLine
 
 **Screenshots, screen recordings, annotation and OCR from your menu bar, 100% local.**
 
@@ -235,15 +236,13 @@ FrameLine captures an area, a window or the whole screen, and records your scree
 |---|---|
 | Platform | macOS 14+ (Sonoma) · Apple Silicon |
 | Stack | Swift · SwiftUI |
-| Latest | first release pending |
+| Latest | [1.0.0](https://github.com/SAASEmpiree/homebrew-tap/releases/tag/frameline-v1.0.0) |
 
 **Install**
 
 ```sh
 brew install --cask saasempiree/tap/frameline
 ```
-
-_The cask is published with FrameLine's first release from this tap; until then the command above reports “no cask”._
 
 **Updates**: Through Homebrew: `brew upgrade --cask frameline` (or `brew upgrade` for everything).
 
