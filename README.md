@@ -43,7 +43,7 @@ scoop install saasempiree/<app>
 | [Memora](#memora) | Notes, spaced-repetition flashcards, quizzes and exam planning, organised by subject, all on your Mac. | pending |
 | [CodeLearn](#codelearn) | A technical dictionary you actually remember: 349 dev, cloud and AI terms with spaced repetition. | pending |
 | [Flow](#flow) | Translate anything from your menu bar: on-device by default, DeepL or any LLM when you want it. | pending |
-| [Units](#units) | Convert length, area, mass, temperature, speed, volume and data from your menu bar, fully offline. | pending |
+| [Units](#units) | Convert length, area, mass, temperature, speed, volume and data from your menu bar, fully offline. | 0.1.1 |
 | [FrameLine](#frameline) | Screenshots, screen recordings, annotation and OCR from your menu bar, 100% local. | pending |
 | [AppGrid](#appgrid) | Keeps Finder's Applications windows laid out as a 6-column, iPhone-style icon grid. | pending |
 | [Comète](#comete) | Run Claude Code, Codex, Gemini and shells side by side in one cockpit, with VS Code-grade terminals. | pending |
@@ -202,7 +202,7 @@ _The cask is published with Flow's first release from this tap; until then the c
 
 ---
 
-### Units
+### <img src="icons/units.png" width="28" height="28" align="center" alt=""> Units
 
 **Convert length, area, mass, temperature, speed, volume and data from your menu bar, fully offline.**
 
@@ -212,15 +212,13 @@ Units converts length, mass, temperature, speed, volume and data sizes one click
 |---|---|
 | Platform | macOS 13+ (Ventura) · Apple Silicon |
 | Stack | Swift · SwiftUI |
-| Latest | first release pending |
+| Latest | [0.1.1](https://github.com/SAASEmpiree/homebrew-tap/releases/tag/units-v0.1.1) |
 
 **Install**
 
 ```sh
 brew install --cask saasempiree/tap/units
 ```
-
-_The cask is published with Units's first release from this tap; until then the command above reports “no cask”._
 
 **Updates**: Updates itself in the background with [Sparkle](https://sparkle-project.org): it checks once a day against the signed feed [`appcasts/units.xml`](appcasts/units.xml). Homebrew leaves it alone (`auto_updates true`).
 
