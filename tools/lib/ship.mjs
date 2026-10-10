@@ -4,6 +4,9 @@
 //     (a) build  (b) install  (c) read the version from the .app  (d) commit, ff main, push, tag
 //     (e) zip, tap release <slug>-v<version>, cask, appcast (Sparkle)  (f) commit + push the tap
 //   sync-after-install <app-repo> [...]   = the same with --sync-only: steps (c)-(f) only.
+//   sync-after-install --from-installed <app-repo>   publish the copy installed TODAY (no build,
+//     no install, never the repo's build output): /Applications/My App/<artifact>, or wherever the
+//     bundle id is installed (AppGrid: ~/Library/Application Support/SAASEmpire). Read-only on the app.
 //
 // Idempotent: same version + same bundle => nothing is duplicated, nothing new is pushed.
 import { copyFileSync, existsSync, mkdirSync, readFileSync, rmSync, statSync, writeFileSync } from 'node:fs';
@@ -22,18 +25,22 @@ import {
 const USAGE = `usage:
   ship <path-to-app-repo> [--dry-run] [--allow-comete] [--app <path/to/App.app>]
   sync-after-install <path-inside-app-repo> [--dry-run] [--allow-comete] [--app <path/to/App.app>]
+  sync-after-install --from-installed <path-to-app-repo> [--dry-run] [--allow-comete]
 
+  --from-installed publish the installed copy as it is (no build, no install, no fallback to the
+                   build artifact; stops if the app is not installed). Same as ship --from-installed.
   --dry-run        print every step and command, change nothing (no build, no push, no upload)
   --allow-comete   allow Comète; even then the install step is skipped (never quit/relaunch Comète)
   --app <path>     publish this .app instead of the one ship would pick (installed copy, else artifact)`;
 
 function parseArgs(argv) {
-  const o = { dryRun: false, allowComete: false, syncOnly: false, app: null, path: null };
+  const o = { dryRun: false, allowComete: false, syncOnly: false, fromInstalled: false, app: null, path: null };
   for (let i = 0; i < argv.length; i++) {
     const a = argv[i];
     if (a === '--dry-run' || a === '-n') o.dryRun = true;
     else if (a === '--allow-comete') o.allowComete = true;
     else if (a === '--sync-only') o.syncOnly = true;
+    else if (a === '--from-installed') o.fromInstalled = o.syncOnly = true;
     else if (a === '--app') o.app = argv[++i];
     else if (a === '-h' || a === '--help') {
       console.log(USAGE);
@@ -49,6 +56,10 @@ function parseArgs(argv) {
   }
   if (!o.path) {
     console.error(USAGE);
+    process.exit(64);
+  }
+  if (o.fromInstalled && o.app) {
+    console.error(`--from-installed and --app are exclusive (--app already names the bundle to publish)\n${USAGE}`);
     process.exit(64);
   }
   return o;
@@ -91,8 +102,10 @@ function loadManifest(root) {
 function findInstalled(m) {
   const base = basename(m.artifact);
   for (const d of INSTALL_DIRS) {
-    const p = join(d, base);
-    if (existsSync(p) && appInfo(p).bundleId === m.bundleId) return p;
+    for (const name of new Set([base, base.normalize('NFC'), base.normalize('NFD')])) {
+      const p = join(d, name);
+      if (existsSync(p) && appInfo(p).bundleId === m.bundleId) return p;
+    }
   }
   const r = tryRead('mdfind', [`kMDItemCFBundleIdentifier == '${m.bundleId}'`]);
   const hits = r.stdout.split('\n').filter((p) => p.endsWith('.app') && INSTALL_DIRS.some((d) => p.startsWith(d + '/')));
@@ -101,6 +114,11 @@ function findInstalled(m) {
 
 function pickApp(root, m, opt, installRan) {
   if (opt.app) return resolve(opt.app);
+  if (opt.fromInstalled) {
+    const inst = findInstalled(m);
+    if (!inst) die(`--from-installed: no installed copy of ${m.bundleId} in ${INSTALL_DIRS.join(', ')} (nor found by Spotlight there). Nothing published.`);
+    return inst;
+  }
   const artifact = resolve(root, m.artifact);
   if (installRan || (opt.syncOnly && m.install)) {
     const inst = findInstalled(m);
@@ -237,8 +255,16 @@ function publishRelease(m, app, workDir) {
   const bhash = bundleHash(app.path);
   let zipSha = state.dryRun ? '<sha256>' : sha256File(zip);
   const rel = ghJson(['release', 'view', tag, '-R', TAP_FULL, '--json', 'tagName,body,assets']);
+  const marker = (sha) => `<!-- ship: bundle-sha256=${bhash} zip-sha256=${sha} -->`;
+  // A release that ship did not create (Omnia 1.0.0: DMG + Windows installer) keeps its own notes;
+  // only the ship marker line is added or replaced.
+  const foreign = rel && rel.body && !rel.body.includes('<!-- ship:') ? rel.body.trim() : null;
   const notes = (sha) =>
-    `${m.name} ${app.version} (build ${app.build}) for macOS.\n\n\`\`\`sh\nbrew install --cask saasempiree/tap/${m.slug}\n\`\`\`\n\nCatalogue: ${catalogueUrl(m.slug)}\n\n<!-- ship: bundle-sha256=${bhash} zip-sha256=${sha} -->`;
+    foreign
+      ? `${foreign}\n\nmacOS zip (\`${asset}\`, used by the cask): the copy installed on the maintainer's Mac, build ${app.build}.\n\n${marker(sha)}`
+      : rel?.body?.includes('<!-- ship:') && !rel.body.startsWith(`${m.name} ${app.version} (build`)
+        ? rel.body.replace(/<!-- ship:[^>]*-->/, marker(sha))
+        : `${m.name} ${app.version} (build ${app.build}) for macOS.\n\n\`\`\`sh\nbrew install --cask saasempiree/tap/${m.slug}\n\`\`\`\n\nCatalogue: ${catalogueUrl(m.slug)}\n\n${marker(sha)}`;
   const hasAsset = rel?.assets?.some((a) => a.name === asset);
   const same = rel && hasAsset && rel.body?.includes(`bundle-sha256=${bhash}`);
   if (same) {
@@ -263,10 +289,11 @@ function publishRelease(m, app, workDir) {
 function writeCask(m, app, zipSha) {
   if (!m.platforms.includes('macos')) return null;
   const p = join(TAP_ROOT, 'Casks', `${m.slug}.rb`);
+  const entry = readJson(join(TAP_ROOT, 'apps', `${m.slug}.json`), {});
   const body = renderCask({
     slug: m.slug, name: m.name, tagline: m.tagline, version: app.version, sha256: zipSha,
-    appName: basename(m.artifact), bundleId: m.bundleId, archs: app.archs, minOS: app.minOS,
-    autoUpdates: m.update === 'sparkle',
+    appName: basename(m.artifact).normalize('NFC'), bundleId: m.bundleId, archs: app.archs, minOS: app.minOS,
+    autoUpdates: m.update === 'sparkle', caskExtra: entry.caskExtra, caveats: entry.caveats,
   });
   if (state.dryRun) info(`would write Casks/${m.slug}.rb (version ${app.version})`);
   else writeFileSync(p, body);
@@ -401,8 +428,8 @@ function remember(root, m, app) {
 function main() {
   const opt = parseArgs(process.argv.slice(2));
   state.dryRun = opt.dryRun;
-  const tool = opt.syncOnly ? 'sync-after-install' : 'ship';
-  if (opt.syncOnly && process.env.SAASEMPIRE_SHIP === '1') {
+  const tool = opt.fromInstalled ? 'sync-after-install --from-installed' : opt.syncOnly ? 'sync-after-install' : 'ship';
+  if (opt.syncOnly && !opt.fromInstalled && process.env.SAASEMPIRE_SHIP === '1') {
     console.log('sync-after-install: called from inside `ship`, which syncs right after the install. Skipping.');
     return;
   }

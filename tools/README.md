@@ -7,6 +7,7 @@ dependencies, `gh` logged in. Every tool prints what it does; `--dry-run` change
 |---|---|
 | `ship <app-repo>` | Full release: (a) `build` (b) `install` (c) read the version from the built/installed `.app` (d) commit everything in the app repo as `release: v<version>`, fast-forward `main`, push, tag `v<version>` (e) zip the `.app` with `ditto`, create/update the tap release `<slug>-v<version>`, regenerate `Casks/<slug>.rb`, and for Sparkle apps `appcasts/<slug>.xml` (f) commit and push the tap. |
 | `sync-after-install <path>` | Steps (c) to (f) only. The last line of an app's deploy/install script. |
+| `sync-after-install --from-installed <app-repo>` | Steps (c) to (f) on the copy **installed today**, as it is: no build, no install, never the repo's build output, and it stops if the app is not installed. For catching GitHub up with an app that was installed before it was wired. `ship --from-installed` is the same command. |
 | `audit` | One row per app: installed version, latest repo tag, cask, appcast, repo visibility, uncommitted/unpushed work. Then every PUBLIC repo outside the allow-list. `--fix-visibility` makes them private. |
 | `install-guard` | Installs the daily launchd guard (`audit --fix-visibility`) and the `gh new` alias. |
 | `lib/catalogue.mjs` | Regenerates `README.md` from `apps/*.json` and `Casks/*.rb` (`node tools/lib/catalogue.mjs`). |
@@ -45,9 +46,27 @@ When `ship` runs the install script itself, the hook notices (`SAASEMPIRE_SHIP=1
 
 ## Which `.app` is published
 
-`--app <path>` if given; otherwise the installed copy (`/Applications/My App/<artifact>`, or
+`--from-installed`: the installed copy, always (`/Applications/My App/<artifact>`, AppGrid's
+`~/Library/Application Support/SAASEmpire/AppGrid.app`, else found by bundle id in those folders);
+the tool stops if there is none. The zip is made with `ditto -c -k --keepParent`, which only reads
+the bundle, so this is safe on a running app (Comète included, with `--allow-comete`).
+
+```bash
+~/Documents/SAASEmpiree/homebrew-tap/tools/sync-after-install --from-installed ~/Documents/SAASEmpiree/Zap --dry-run
+~/Documents/SAASEmpiree/homebrew-tap/tools/sync-after-install --from-installed ~/Documents/SAASEmpiree/Zap
+```
+
+Otherwise `--app <path>` if given; otherwise the installed copy (`/Applications/My App/<artifact>`, or
 `~/Library/Application Support/SAASEmpire/<artifact>` for AppGrid, else found by bundle id) when the
 app has an `install` step; otherwise the build artifact. The bundle id must match `app.json`.
+
+## Per-app cask extras
+
+`apps/<slug>.json` may carry two optional fields that `ship` puts into the generated cask:
+`caveats` (lines shown before the standard “self-signed” note, e.g. Omnia's optional ffmpeg) and
+`caskExtra` (raw Ruby stanzas, e.g. AppGrid's `postflight` that writes and loads its launch agent and
+its `uninstall launchctl:`). A release that `ship` did not create (Omnia 1.0.0: DMG + Windows
+installer) keeps its notes and assets; `ship` only adds its zip and its marker line.
 
 ## Guarantees
 

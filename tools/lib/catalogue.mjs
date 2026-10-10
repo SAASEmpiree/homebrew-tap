@@ -19,7 +19,9 @@ export function caskDesc(name, tagline) {
 }
 
 export function renderCask(a) {
-  const { slug, name, tagline, version, sha256, appName, bundleId, archs = [], minOS, autoUpdates } = a;
+  // caskExtra: raw Ruby stanzas from apps/<slug>.json (a launchd helper's postflight/uninstall);
+  // caveats: extra caveat lines put before the standard "self-signed" note.
+  const { slug, name, tagline, version, sha256, appName, bundleId, archs = [], minOS, autoUpdates, caskExtra, caveats } = a;
   const url = a.url || `${TAP_URL}/releases/download/${releaseTag(slug, '#{version}')}/${assetName(slug, '#{version}')}`;
   const major = minOS ? Number(String(minOS).split('.')[0]) : 0;
   const deps = [];
@@ -47,9 +49,9 @@ cask "${slug}" do
   homepage "${catalogueUrl(slug)}"
 ${autoUpdates ? '\n  auto_updates true\n' : ''}${deps.length ? '\n' + deps.join('\n') + '\n' : ''}
   app "${rb(appName)}"
-${zap.length ? `\n  zap trash: [\n${zap.map((p) => `    "${rb(p)}",`).join('\n')}\n  ]\n` : ''}
+${caskExtra ? `\n${String(caskExtra).replace(/\s+$/, '')}\n` : ''}${zap.length ? `\n  zap trash: [\n${zap.map((p) => `    "${rb(p)}",`).join('\n')}\n  ]\n` : ''}
   caveats <<~EOS
-    ${rb(name)} is signed with the SAASEmpiree self-signed certificate, not notarized by Apple.
+${caveats ? String(caveats).trim().split('\n').map((l) => (l ? `    ${l}` : '')).join('\n') + '\n\n' : ''}    ${rb(name)} is signed with the SAASEmpiree self-signed certificate, not notarized by Apple.
     If macOS refuses to open it the first time, run once:
       xattr -dr com.apple.quarantine "#{appdir}/${rb(appName)}"
   EOS

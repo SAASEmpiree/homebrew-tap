@@ -16,5 +16,6 @@
   "archs": [
     "arm64"
   ],
-  "scoop": "omnia"
+  "scoop": "omnia",
+  "caveats": "Audio/video tools and document conversion use ffmpeg and LibreOffice when installed (optional)."
 }
