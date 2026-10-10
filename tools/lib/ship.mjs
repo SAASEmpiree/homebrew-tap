@@ -54,15 +54,23 @@ function parseArgs(argv) {
   return o;
 }
 
+// Walks up from <p> (a folder or a file such as the calling script's "$0") to the folder holding
+// app.json. If <p> does not exist (a relative "$0" after the script cd'ed), walks up from the cwd.
 function findRepoRoot(p) {
-  let d = resolve(p);
-  if (existsSync(d) && !statSync(d).isDirectory()) d = dirname(d);
-  for (;;) {
-    if (existsSync(join(d, 'app.json'))) return d;
-    const up = dirname(d);
-    if (up === d) die(`no app.json found in ${resolve(p)} or any parent folder`);
-    d = up;
-  }
+  const up = (start) => {
+    let d = start;
+    if (existsSync(d) && !statSync(d).isDirectory()) d = dirname(d);
+    for (;;) {
+      if (existsSync(join(d, 'app.json'))) return d;
+      const parent = dirname(d);
+      if (parent === d) return null;
+      d = parent;
+    }
+  };
+  const abs = resolve(p);
+  const root = (existsSync(abs) && up(abs)) || up(process.cwd());
+  if (!root) die(`no app.json found in ${abs}, ${process.cwd()} or any parent folder`);
+  return root;
 }
 
 function loadManifest(root) {
@@ -285,6 +293,20 @@ function writeAppcast(m, app, zip, workDir) {
     info(`would write appcasts/${m.slug}.xml`);
     return relative(TAP_ROOT, p);
   }
+  // Idempotence: an item for this build that already points at this exact zip (URL, length and a
+  // valid EdDSA signature) is left untouched, so a re-run changes nothing (not even pubDate).
+  if (existsSync(p)) {
+    const cur = readFileSync(p, 'utf8');
+    const item = (cur.match(/<item>[\s\S]*?<\/item>/g) || []).find((i) => i.includes(`<sparkle:version>${app.build}</sparkle:version>`));
+    const url = `${downloadPrefix(m.slug, app.version)}${basename(zip)}`;
+    const sig = item && /sparkle:edSignature="([^"]+)"/.exec(item)?.[1];
+    const len = item && /length="(\d+)"/.exec(item)?.[1];
+    if (item && item.includes(`url="${url}"`) && sig && Number(len) === statSync(zip).size &&
+        tryRead(join(SPARKLE_BIN, 'sign_update'), ['--verify', zip, sig]).status === 0) {
+      ok(`appcasts/${m.slug}.xml already has ${m.name} ${app.version} (build ${app.build}), signature verified`);
+      return relative(TAP_ROOT, p);
+    }
+  }
   rmSync(archives, { recursive: true, force: true });
   mkdirSync(archives, { recursive: true });
   copyFileSync(zip, join(archives, basename(zip)));
@@ -327,7 +349,10 @@ function writeCatalogueEntry(root, m, app) {
     ...prev,
     name: m.name, slug: m.slug, tagline: m.tagline || prev.tagline, platforms: m.platforms, stack: m.stack || prev.stack,
     update: m.update, bundleId: m.bundleId, appName: basename(m.artifact),
-    release: { version: app.version, build: app.build, minOS: app.minOS, archs: app.archs, date: new Date().toISOString().slice(0, 10) },
+    release: {
+      version: app.version, build: app.build, minOS: app.minOS, archs: app.archs,
+      date: prev.release?.version === app.version && prev.release?.build === app.build ? prev.release.date : new Date().toISOString().slice(0, 10),
+    },
   };
   const files = [relative(TAP_ROOT, p)];
   if (state.dryRun) {
