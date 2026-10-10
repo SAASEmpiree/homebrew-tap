@@ -35,11 +35,11 @@ Append this as the **last line** of the app's deploy/install script (the one tha
 into `/Applications/My App`):
 
 ```bash
-"$HOME/Documents/SAASEmpiree/homebrew-tap/tools/sync-after-install" "$(cd "$(dirname "$0")" && pwd)" || echo "⚠ sync-after-install failed: run ~/Documents/SAASEmpiree/homebrew-tap/tools/audit" >&2
+"$HOME/Documents/SAASEmpiree/homebrew-tap/tools/sync-after-install" "$0" || echo "⚠ sync-after-install failed: run ~/Documents/SAASEmpiree/homebrew-tap/tools/audit" >&2
 ```
 
-It walks up from the script's folder to the `app.json`, so it works from `scripts/deploy.sh` as well as
-from `./deploy.sh`. If the sync fails (no network, secret found, branch diverged) the install still
+It walks up from the script (`$0`) to the `app.json`, so it works from `scripts/deploy.sh` as well as
+from `./deploy.sh`; if `$0` is relative and the script has `cd`'ed, it walks up from the current folder. If the sync fails (no network, secret found, branch diverged) the install still
 counts and the error is loud; the daily guard and `audit` show the drift until the next sync.
 When `ship` runs the install script itself, the hook notices (`SAASEMPIRE_SHIP=1`) and lets `ship` sync.
 
