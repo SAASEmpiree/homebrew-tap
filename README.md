@@ -40,7 +40,7 @@ scoop install saasempiree/<app>
 | [Omnia](#omnia) | Convert, compress, merge and clean files 100% on your Mac, with zero network. | 1.0.0 |
 | [Classeur](#classeur) | Drop your paperwork in; it gets read, filed by year and month, and encrypted on your Mac. | 0.3.0 |
 | [Pécule](#pecule) | Simulate, track and budget your money on your Mac, with no bank link and no account. | pending |
-| [Memora](#memora) | Notes, spaced-repetition flashcards, quizzes and exam planning, organised by subject, all on your Mac. | pending |
+| [Memora](#memora) | Notes, spaced-repetition flashcards, quizzes and exam planning, organised by subject, all on your Mac. | 0.6.0 |
 | [CodeLearn](#codelearn) | A technical dictionary you actually remember: 349 dev, cloud and AI terms with spaced repetition. | 1.0.0 |
 | [Flow](#flow) | Translate anything from your menu bar: on-device by default, DeepL or any LLM when you want it. | 0.2.0 |
 | [Units](#units) | Convert length, area, mass, temperature, speed, volume and data from your menu bar, fully offline. | 0.1.1 |
@@ -130,7 +130,8 @@ _The cask is published with Pécule's first release from this tap; until then th
 
 ---
 
-### Memora
+<a name="memora"></a>
+### <img src="icons/memora.png" width="28" height="28" align="center" alt=""> Memora
 
 **Notes, spaced-repetition flashcards, quizzes and exam planning, organised by subject, all on your Mac.**
 
@@ -140,15 +141,13 @@ Memora brings all your revision together, organised by subject: course notes, fl
 |---|---|
 | Platform | macOS 10.13+ · Apple Silicon |
 | Stack | Tauri · Rust |
-| Latest | first release pending |
+| Latest | [0.6.0](https://github.com/SAASEmpiree/homebrew-tap/releases/tag/memora-v0.6.0) |
 
 **Install**
 
 ```sh
 brew install --cask saasempiree/tap/memora
 ```
-
-_The cask is published with Memora's first release from this tap; until then the command above reports “no cask”._
 
 **Updates**: Through Homebrew: `brew upgrade --cask memora` (or `brew upgrade` for everything).
 
