@@ -16,5 +16,14 @@
     "arm64"
   ],
   "caskExtra": "  # AppGrid is a background helper (no window, no Dock icon): run it at login through a launch agent.\n  postflight do\n    agent = File.expand_path(\"~/Library/LaunchAgents/com.saasempiree.appgrid.plist\")\n    FileUtils.mkdir_p File.dirname(agent)\n    File.write agent, <<~PLIST\n      <?xml version=\"1.0\" encoding=\"UTF-8\"?>\n      <!DOCTYPE plist PUBLIC \"-//Apple//DTD PLIST 1.0//EN\" \"http://www.apple.com/DTDs/PropertyList-1.0.dtd\">\n      <plist version=\"1.0\">\n      <dict>\n        <key>Label</key><string>com.saasempiree.appgrid</string>\n        <key>ProgramArguments</key>\n        <array><string>#{appdir}/AppGrid.app/Contents/MacOS/AppGrid</string></array>\n        <key>RunAtLoad</key><true/>\n        <key>KeepAlive</key><true/>\n        <key>ProcessType</key><string>Interactive</string>\n      </dict>\n      </plist>\n    PLIST\n    system_command \"/bin/launchctl\", args: [\"bootout\", \"gui/#{Process.uid}/com.saasempiree.appgrid\"], must_succeed: false\n    system_command \"/bin/launchctl\", args: [\"bootstrap\", \"gui/#{Process.uid}\", agent]\n  end\n\n  uninstall launchctl: \"com.saasempiree.appgrid\",\n            quit:      \"com.saasempiree.appgrid\"",
-  "caveats": "AppGrid runs in the background (launch agent com.saasempiree.appgrid): it has no window.\nOn first use, allow it to control Finder (Automation) when macOS asks."
+  "caveats": "AppGrid runs in the background (launch agent com.saasempiree.appgrid): it has no window.\nOn first use, allow it to control Finder (Automation) when macOS asks.",
+  "release": {
+    "version": "1.0",
+    "build": "1",
+    "minOS": "26.0",
+    "archs": [
+      "arm64"
+    ],
+    "date": "2026-10-10"
+  }
 }

@@ -45,7 +45,7 @@ scoop install saasempiree/<app>
 | [Flow](#flow) | Translate anything from your menu bar: on-device by default, DeepL or any LLM when you want it. | pending |
 | [Units](#units) | Convert length, area, mass, temperature, speed, volume and data from your menu bar, fully offline. | 0.1.1 |
 | [FrameLine](#frameline) | Screenshots, screen recordings, annotation and OCR from your menu bar, 100% local. | 1.0.0 |
-| [AppGrid](#appgrid) | Keeps Finder's Applications windows laid out as a 6-column, iPhone-style icon grid. | pending |
+| [AppGrid](#appgrid) | Keeps Finder's Applications windows laid out as a 6-column, iPhone-style icon grid. | 1.0 |
 | [Comète](#comete) | Run Claude Code, Codex, Gemini and shells side by side in one cockpit, with VS Code-grade terminals. | pending |
 | [Jarvis](#jarvis) | A voice-driven assistant for your Mac, powered by Claude, that talks back in French and acts on your apps. | 0.3 |
 | [Zap](#zap) | Open any project in your code editor in under two seconds, from a Spotlight-style menu-bar palette. | 2.5.8 |
@@ -257,15 +257,13 @@ AppGrid is an invisible helper that keeps Finder's Applications windows laid out
 |---|---|
 | Platform | macOS 26+ (Tahoe) · Apple Silicon |
 | Stack | Swift · SwiftUI |
-| Latest | first release pending |
+| Latest | [1.0](https://github.com/SAASEmpiree/homebrew-tap/releases/tag/appgrid-v1.0) |
 
 **Install**
 
 ```sh
 brew install --cask saasempiree/tap/appgrid
 ```
-
-_The cask is published with AppGrid's first release from this tap; until then the command above reports “no cask”._
 
 **Updates**: Through Homebrew: `brew upgrade --cask appgrid` (or `brew upgrade` for everything).
 
