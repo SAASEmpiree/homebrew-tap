@@ -41,7 +41,7 @@ scoop install saasempiree/<app>
 | [Classeur](#classeur) | Drop your paperwork in; it gets read, filed by year and month, and encrypted on your Mac. | pending |
 | [Pécule](#pecule) | Simulate, track and budget your money on your Mac, with no bank link and no account. | pending |
 | [Memora](#memora) | Notes, spaced-repetition flashcards, quizzes and exam planning, organised by subject, all on your Mac. | pending |
-| [CodeLearn](#codelearn) | A technical dictionary you actually remember: 349 dev, cloud and AI terms with spaced repetition. | pending |
+| [CodeLearn](#codelearn) | A technical dictionary you actually remember: 349 dev, cloud and AI terms with spaced repetition. | 1.0.0 |
 | [Flow](#flow) | Translate anything from your menu bar: on-device by default, DeepL or any LLM when you want it. | pending |
 | [Units](#units) | Convert length, area, mass, temperature, speed, volume and data from your menu bar, fully offline. | 0.1.1 |
 | [FrameLine](#frameline) | Screenshots, screen recordings, annotation and OCR from your menu bar, 100% local. | 1.0.0 |
@@ -154,7 +154,8 @@ _The cask is published with Memora's first release from this tap; until then the
 
 ---
 
-### CodeLearn
+<a name="codelearn"></a>
+### <img src="icons/codelearn.png" width="28" height="28" align="center" alt=""> CodeLearn
 
 **A technical dictionary you actually remember: 349 dev, cloud and AI terms with spaced repetition.**
 
@@ -164,15 +165,13 @@ CodeLearn is a dictionary of technical vocabulary (dev, systems, networking, clo
 |---|---|
 | Platform | macOS 14+ (Sonoma) · Apple Silicon |
 | Stack | Swift · SwiftUI |
-| Latest | first release pending |
+| Latest | [1.0.0](https://github.com/SAASEmpiree/homebrew-tap/releases/tag/codelearn-v1.0.0) |
 
 **Install**
 
 ```sh
 brew install --cask saasempiree/tap/codelearn
 ```
-
-_The cask is published with CodeLearn's first release from this tap; until then the command above reports “no cask”._
 
 **Updates**: Through Homebrew: `brew upgrade --cask codelearn` (or `brew upgrade` for everything).
 
