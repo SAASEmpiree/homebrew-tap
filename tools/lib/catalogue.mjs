@@ -25,7 +25,7 @@ export function renderCask(a) {
   const deps = [];
   if (archs.length === 1 && archs[0] === 'arm64') deps.push('  depends_on arch: :arm64');
   if (archs.length === 1 && archs[0] === 'x86_64') deps.push('  depends_on arch: :x86_64');
-  if (MACOS[major]) deps.push(`  depends_on macos: ">= :${MACOS[major]}"`);
+  if (MACOS[major]) deps.push(`  depends_on macos: :${MACOS[major]}`);
   const zap = bundleId
     ? [
         `~/Library/Application Support/${bundleId}`,
