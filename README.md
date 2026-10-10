@@ -7,7 +7,7 @@
 
 [![Homebrew tap](https://img.shields.io/badge/brew-saasempiree%2Ftap-FBB040?style=flat-square&logo=homebrew&logoColor=white)](#quick-start)
 [![Scoop bucket](https://img.shields.io/badge/scoop-saasempiree-5391FE?style=flat-square&logo=windows&logoColor=white)](#windows)
-[![Apps](https://img.shields.io/badge/apps-10-0a0a0c?style=flat-square)](#catalogue)
+[![Apps](https://img.shields.io/badge/apps-9-0a0a0c?style=flat-square)](#catalogue)
 
 </div>
 
@@ -44,7 +44,6 @@ scoop install saasempiree/<app>
 | [FrameLine](#frameline) | Screenshots, screen recordings, annotation and OCR from your menu bar, 100% local. | 1.0.0 |
 | [AppGrid](#appgrid) | Keeps Finder's Applications windows laid out as a 6-column, iPhone-style icon grid. | 1.0 |
 | [Comète](#comete) | Run Claude Code, Codex, Gemini and shells side by side in one cockpit, with VS Code-grade terminals. | 0.1.0 |
-| [Zap](#zap) | Open any project in your code editor in under two seconds, from a Spotlight-style menu-bar palette. | 2.5.8 |
 | [PleurIA](#pleuria) | A menu-bar planet that cries at every AI request and counts the litres of water your tokens cost. | 1.0 |
 | [Kairo](#kairo) | A shared workspace for small teams: issues, docs and projects, Linear meets Notion. | own pipeline |
 
@@ -212,29 +211,6 @@ brew install --cask saasempiree/tap/comete
 ```
 
 **Updates**: Through Homebrew: `brew upgrade --cask comete` (or `brew upgrade` for everything).
-
----
-
-<a name="zap"></a>
-### <img src="icons/zap.png" width="28" height="28" align="center" alt=""> Zap
-
-**Open any project in your code editor in under two seconds, from a Spotlight-style menu-bar palette.**
-
-Press ⌥ Space, type two or three letters, hit Return: Zap finds the project among the folders you told it to watch and opens it in a new window of your editor. Fuzzy search learns what you open most. 100% local, interface in 20 languages.
-
-| | |
-|---|---|
-| Platform | macOS 14+ (Sonoma) · Apple Silicon |
-| Stack | Swift · SwiftUI |
-| Latest | [2.5.8](https://github.com/SAASEmpiree/homebrew-tap/releases/tag/zap-v2.5.8) |
-
-**Install**
-
-```sh
-brew install --cask saasempiree/tap/zap
-```
-
-**Updates**: Through Homebrew: `brew upgrade --cask zap` (or `brew upgrade` for everything).
 
 ---
 

@@ -36,7 +36,7 @@ export const isComete = (m) => /^com[eè]te/i.test(m.name || '') || /^comete/.te
 export const OWN_PIPELINE = ['kairo'];
 // Apps removed from the suite (2026-10-10): ship refuses them and audit never lists them, even if a
 // local folder with an app.json is still on disk.
-export const RETIRED = ['codelearn', 'jarvis', 'memora', 'pecule'];
+export const RETIRED = ['codelearn', 'jarvis', 'memora', 'pecule', 'zap'];
 
 export const APP_DIR = '/Applications/My App';
 export const SUPPORT = join(HOME, 'Library/Application Support/SAASEmpire');
