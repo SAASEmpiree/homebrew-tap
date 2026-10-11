@@ -43,7 +43,7 @@ scoop install saasempiree/<app>
 | [Units](#units) | Convert length, area, mass, temperature, speed, volume and data from your menu bar, fully offline. | 0.1.2 |
 | [FrameLine](#frameline) | Screenshots, screen recordings, annotation and OCR from your menu bar, 100% local. | 1.0.0 |
 | [AppGrid](#appgrid) | Keeps Finder's Applications windows laid out as a 6-column, iPhone-style icon grid. | 1.0 |
-| [Comète](#comete) | Run Claude Code, Codex, Gemini and shells side by side in one cockpit, with VS Code-grade terminals. | 0.3.3 |
+| [Comète](#comete) | Run Claude Code, Codex, Gemini and shells side by side in one cockpit, with VS Code-grade terminals. | 0.3.4 |
 | [My CodexBar](#my-codexbar) | Claude Code and Codex usage limits, resets and spend in your menu bar. | 1.1.1 |
 | [PleurIA](#pleuria) | A menu-bar planet that cries at every AI request and counts the litres of water your tokens cost. | 1.0 |
 | [Kairo](#kairo) | A shared workspace for small teams: issues, docs and projects, Linear meets Notion. | own pipeline |
@@ -203,7 +203,7 @@ Comète runs your AI coding agents (Claude Code, Codex, Gemini or a plain shell)
 |---|---|
 | Platform | macOS 11+ · Apple Silicon |
 | Stack | Tauri · Rust |
-| Latest | [0.3.3](https://github.com/SAASEmpiree/homebrew-tap/releases/tag/comete-v0.3.3) |
+| Latest | [0.3.4](https://github.com/SAASEmpiree/homebrew-tap/releases/tag/comete-v0.3.4) |
 
 **Install**
 
