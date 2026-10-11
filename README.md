@@ -44,7 +44,7 @@ scoop install saasempiree/<app>
 | [FrameLine](#frameline) | Screenshots, screen recordings, annotation and OCR from your menu bar, 100% local. | 1.0.0 |
 | [AppGrid](#appgrid) | Keeps Finder's Applications windows laid out as a 6-column, iPhone-style icon grid. | 1.0 |
 | [Comète](#comete) | Run Claude Code, Codex, Gemini and shells side by side in one cockpit, with VS Code-grade terminals. | 0.3.1 |
-| [My CodexBar](#my-codexbar) | Claude Code and Codex usage limits, resets and spend in your menu bar. | 1.0.0 |
+| [My CodexBar](#my-codexbar) | Claude Code and Codex usage limits, resets and spend in your menu bar. | 1.1.0 |
 | [PleurIA](#pleuria) | A menu-bar planet that cries at every AI request and counts the litres of water your tokens cost. | 1.0 |
 | [Kairo](#kairo) | A shared workspace for small teams: issues, docs and projects, Linear meets Notion. | own pipeline |
 
@@ -226,7 +226,7 @@ My CodexBar shows how much of your Claude Code (and, if you switch them on, Code
 |---|---|
 | Platform | macOS 14+ (Sonoma) · Apple Silicon |
 | Stack | Swift · SwiftUI |
-| Latest | [1.0.0](https://github.com/SAASEmpiree/homebrew-tap/releases/tag/my-codexbar-v1.0.0) |
+| Latest | [1.1.0](https://github.com/SAASEmpiree/homebrew-tap/releases/tag/my-codexbar-v1.1.0) |
 
 **Install**
 
