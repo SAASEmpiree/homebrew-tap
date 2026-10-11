@@ -12,8 +12,8 @@
   "bundleId": "com.saasempiree.mycodexbar",
   "appName": "My CodexBar.app",
   "release": {
-    "version": "1.1.1",
-    "build": "3",
+    "version": "1.2.0",
+    "build": "4",
     "minOS": "14.0",
     "archs": [
       "arm64"
