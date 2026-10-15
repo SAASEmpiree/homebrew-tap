@@ -12,12 +12,12 @@
   "bundleId": "com.saasempiree.mycodexbar",
   "appName": "My CodexBar.app",
   "release": {
-    "version": "1.3.7",
-    "build": "13",
+    "version": "1.3.8",
+    "build": "14",
     "minOS": "14.0",
     "archs": [
       "arm64"
     ],
-    "date": "2026-10-13"
+    "date": "2026-10-15"
   }
 }

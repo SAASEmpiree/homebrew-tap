@@ -3,6 +3,16 @@
     <channel>
         <title>My CodexBar</title>
         <item>
+            <title>1.3.8</title>
+            <pubDate>Thu, 15 Oct 2026 15:20:52 +0200</pubDate>
+            <link>https://github.com/SAASEmpiree/homebrew-tap#my-codexbar</link>
+            <sparkle:version>14</sparkle:version>
+            <sparkle:shortVersionString>1.3.8</sparkle:shortVersionString>
+            <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
+            <sparkle:hardwareRequirements>arm64</sparkle:hardwareRequirements>
+            <enclosure url="https://github.com/SAASEmpiree/homebrew-tap/releases/download/my-codexbar-v1.3.8/my-codexbar-1.3.8.zip" length="25911272" type="application/octet-stream" sparkle:edSignature="RiektVuZ1C0qT7RykmTjFp9eAdiU9Jqum4MkPkJM4TE8+O/jNIgXVC0ZB6qdrW62BnwPnFYLiIEZssCsaskeDw=="/>
+        </item>
+        <item>
             <title>1.3.7</title>
             <pubDate>Tue, 13 Oct 2026 12:39:58 +0200</pubDate>
             <link>https://github.com/SAASEmpiree/homebrew-tap#my-codexbar</link>
