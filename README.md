@@ -41,7 +41,7 @@ scoop install saasempiree/<app>
 | [Classeur](#classeur) | Drop your paperwork in; it gets read, filed by year and month, and encrypted on your Mac. | 0.3.0 |
 | [Flow](#flow) | Translate anything from your menu bar: on-device by default, DeepL or any LLM when you want it. | 0.2.0 |
 | [Units](#units) | Convert length, area, mass, temperature, speed, volume and data from your menu bar, fully offline. | 0.1.2 |
-| [FrameLine](#frameline) | Screenshots, screen recordings, annotation and OCR from your menu bar, 100% local. | 1.0.0 |
+| [FrameLine](#frameline) | Screenshots, screen recordings, annotation and OCR from your menu bar, 100% local. | 1.0.1 |
 | [AppGrid](#appgrid) | Keeps Finder's Applications windows laid out as a 6-column, iPhone-style icon grid. | 1.0 |
 | [Comète](#comete) | Run Claude Code, Codex, Gemini and shells side by side in one cockpit, with VS Code-grade terminals. | 0.4.0 |
 | [My CodexBar](#my-codexbar) | Claude Code and Codex usage limits, resets and spend in your menu bar. | 1.3.7 |
@@ -158,7 +158,7 @@ FrameLine captures an area, a window or the whole screen, and records your scree
 |---|---|
 | Platform | macOS 14+ (Sonoma) · Apple Silicon |
 | Stack | Swift · SwiftUI |
-| Latest | [1.0.0](https://github.com/SAASEmpiree/homebrew-tap/releases/tag/frameline-v1.0.0) |
+| Latest | [1.0.1](https://github.com/SAASEmpiree/homebrew-tap/releases/tag/frameline-v1.0.1) |
 
 **Install**
 
