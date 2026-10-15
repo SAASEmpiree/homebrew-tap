@@ -37,7 +37,7 @@ scoop install saasempiree/<app>
 
 | App | What it does | Latest |
 |---|---|---|
-| [Omnia](#omnia) | Convert, compress, merge and clean files 100% on your Mac, with zero network. | 1.0.0 |
+| [Omnia](#omnia) | Convert, compress, merge and clean files 100% on your Mac, with zero network. | 1.0.1 |
 | [Classeur](#classeur) | Drop your paperwork in; it gets read, filed by year and month, and encrypted on your Mac. | 0.3.0 |
 | [Flow](#flow) | Translate anything from your menu bar: on-device by default, DeepL or any LLM when you want it. | 0.2.0 |
 | [Units](#units) | Convert length, area, mass, temperature, speed, volume and data from your menu bar, fully offline. | 0.1.2 |
@@ -59,7 +59,7 @@ Omnia gathers the little file chores you would normally hand to a website: conve
 |---|---|
 | Platform | macOS 10.13+ · Apple Silicon · Windows 10+ |
 | Stack | Tauri · Rust |
-| Latest | [1.0.0](https://github.com/SAASEmpiree/homebrew-tap/releases/tag/omnia-v1.0.0) |
+| Latest | [1.0.1](https://github.com/SAASEmpiree/homebrew-tap/releases/tag/omnia-v1.0.1) |
 
 **Install**
 
