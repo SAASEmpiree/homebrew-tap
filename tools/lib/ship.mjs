@@ -474,7 +474,18 @@ function publishDirectDownload(m, app, zip) {
   const rel = ghJson(['release', 'view', tag, '-R', repo, '--json', 'tagName']);
   const notes = `${m.name} ${app.version} for macOS.\n\nDownload \`${asset}\`, unzip it and move ${m.name}.app to Applications. Or with Homebrew:\n\n\`\`\`sh\nbrew install --cask saasempiree/tap/${m.slug}\n\`\`\``;
   if (rel) gh(['release', 'upload', tag, copy, '-R', repo, '--clobber']);
-  else gh(['release', 'create', tag, copy, '-R', repo, '--verify-tag', '--title', `${m.name} ${app.version}`, '--notes', notes, '--latest']);
+  else {
+    // Other platforms' builds (FrameLine-Windows.zip) live on the same latest release: carry them
+    // over, or their releases/latest/download link would 404 as soon as this release becomes latest.
+    const prev = ghJson(['release', 'view', '-R', repo, '--json', 'tagName,assets']);
+    const carried = (prev?.assets || []).map((a) => a.name).filter((n) => n !== asset);
+    const carryDir = join(dirname(zip), 'carried');
+    for (const name of carried) {
+      run('gh', ['release', 'download', prev.tagName, '-R', repo, '-p', name, '-D', carryDir, '--clobber'], { read: !state.dryRun });
+    }
+    gh(['release', 'create', tag, copy, ...carried.map((n) => join(carryDir, n)), '-R', repo, '--verify-tag', '--title', `${m.name} ${app.version}`, '--notes', notes, '--latest']);
+    if (carried.length) info(`carried over from ${prev.tagName}: ${carried.join(', ')}`);
+  }
   ok(`direct download: ${repo} release ${tag} (${asset})`);
 }
 
