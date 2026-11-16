@@ -461,6 +461,23 @@ function main() {
   return withLock(SYNC_LOCK, () => publish(root, m, opt, comete));
 }
 
+// Optional "directDownload": {"asset": "FrameLine-macOS.zip"} in app.json: the same zip is also
+// published as the LATEST release of the app's own repo under a fixed name, so its README can link to
+// https://github.com/<owner>/<repo>/releases/latest/download/<asset>, a URL that never goes stale.
+function publishDirectDownload(m, app, zip) {
+  const asset = m.directDownload?.asset;
+  if (!asset) return;
+  const repo = `${OWNER}/${m.repo || m.slug}`;
+  const tag = `v${app.version}`;
+  const copy = join(dirname(zip), asset);
+  if (!state.dryRun) copyFileSync(zip, copy);
+  const rel = ghJson(['release', 'view', tag, '-R', repo, '--json', 'tagName']);
+  const notes = `${m.name} ${app.version} for macOS.\n\nDownload \`${asset}\`, unzip it and move ${m.name}.app to Applications. Or with Homebrew:\n\n\`\`\`sh\nbrew install --cask saasempiree/tap/${m.slug}\n\`\`\``;
+  if (rel) gh(['release', 'upload', tag, copy, '-R', repo, '--clobber']);
+  else gh(['release', 'create', tag, copy, '-R', repo, '--verify-tag', '--title', `${m.name} ${app.version}`, '--notes', notes, '--latest']);
+  ok(`direct download: ${repo} release ${tag} (${asset})`);
+}
+
 function publish(root, m, opt, comete) {
   let installRan = false;
   if (!opt.syncOnly) {
@@ -516,6 +533,7 @@ function publish(root, m, opt, comete) {
     run('git', ['pull', '--quiet', '--rebase', '--autostash', 'origin', 'main'], { cwd: TAP_ROOT });
     const workDir = join(CACHE, m.slug, app.version);
     const { zip, zipSha } = publishRelease(m, app, workDir);
+    publishDirectDownload(m, app, zip);
     const files = [];
     const cask = writeCask(m, app, zipSha);
     if (cask) files.push(cask);
