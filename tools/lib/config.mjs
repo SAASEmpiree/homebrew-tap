@@ -21,7 +21,7 @@ export const feedUrl = (slug) => `${RAW_TAP}/appcasts/${slug}.xml`;
 export const catalogueUrl = (slug) => `${TAP_URL}#${slug}`;
 
 // Exactly these repos may be public. Everything else holds code and must stay private.
-export const PUBLIC_ALLOWLIST = ['SAASEmpiree', 'homebrew-tap', 'kairo-site'];
+export const PUBLIC_ALLOWLIST = ['SAASEmpiree', 'homebrew-tap', 'kairo-site', 'frameline'];
 
 // Builds already in the wild read their Sparkle feed from the profile repo
 // (SUFeedURL = raw.githubusercontent.com/SAASEmpiree/SAASEmpiree/main/appcasts/<slug>.xml).
